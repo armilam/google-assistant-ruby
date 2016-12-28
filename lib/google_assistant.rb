@@ -25,6 +25,10 @@ class GoogleAssistant
     @_intent ||= Intent.new(intent_string)
   end
 
+  def conversation
+    @_conversation ||= Conversation.new(conversation_params)
+  end
+
   def tell(message)
     final_response = { speech_response: {} }
 
@@ -156,6 +160,10 @@ class GoogleAssistant
 
   def intent_string
     inputs[0]["intent"] || handle_error("Missing intent from request body")
+  end
+
+  def conversation_params
+    params["conversation"] || {}
   end
 
   def handle_error(message)
