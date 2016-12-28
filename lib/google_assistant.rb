@@ -4,15 +4,19 @@ Dir["#{File.dirname(__FILE__)}/google_assistant/**/*.rb"].each { |file| require 
 
 class GoogleAssistant
   attr_reader :params
+  attr_reader :response
 
   INPUTS_MAX = 2
 
-  def initialize(params)
+  def initialize(params, response)
     @params = params
+    @response = response
   end
 
   def respond_to(&block)
     yield(self)
+
+    response.headers["Google-Assistant-API-Version"] = "v1"
 
     intent.call
   end
