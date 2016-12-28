@@ -1,5 +1,15 @@
 # Google Assistant Ruby
 
+Write Google Assistant actions in Ruby.
+
+## Installation
+
+```rb
+gem "google_assistant"
+```
+
+## Usage
+
 Details to come. Basically, you can use this in rails like so:
 
 ```rb
@@ -20,3 +30,7 @@ class GoogleAssistantController < ApplicationController
   end
 end
 ```
+
+Check out Google's instructions at https://developers.google.com/actions/develop/sdk/getting-started. You'll need to add an `actions.json` file, but Google's instructions pretty much cover deploying a Google Assistant action.
+
+Currently, this gem only supports `tell`. `ask` is coming soon.
