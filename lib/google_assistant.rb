@@ -5,6 +5,8 @@ Dir["#{File.dirname(__FILE__)}/google_assistant/**/*.rb"].each { |file| require 
 class GoogleAssistant
   attr_reader :params
 
+  INPUTS_MAX = 2
+
   def initialize(params)
     @params = params
   end
@@ -31,6 +33,64 @@ class GoogleAssistant
     build_response(nil, false, nil, final_response)
   end
 
+  def ask(input_prompt, dialog_state = nil)
+    if input_prompt.nil?
+      return handle_error("Invalid input prompt")
+    end
+
+    if input_prompt.is_a?(String)
+      input_prompt = build_input_prompt(is_ssml(input_prompt), input_prompt)
+    end
+
+    if dialog_state.nil?
+      dialog_state = {
+        state: "state", #(self.state instanceof State ? self.state.getName() : self.state),
+        data: "data" #self.data
+      }
+    elsif dialog_state.is_a?(Array)
+      return handle_error("Invalid dialog state")
+    end
+
+    expected_intent = build_expected_intent(StandardIntents::TEXT)
+
+    build_ask(input_prompt, [expected_intent], dialog_state)
+  end
+
+  def build_input_prompt(is_ssml, initial_prompt, no_inputs = [])
+    if no_inputs&.size > INPUTS_MAX
+      handle_error("Invalid number of no inputs")
+      return nil
+    end
+
+    if is_ssml
+      initial_prompts = [
+        { ssml: initial_prompt }
+      ]
+
+      no_input_prompts = no_inputs.map do |no_input_prompt|
+        { ssml: no_input_prompt }
+      end
+
+      {
+        initial_prompts: initial_prompts,
+        no_input_prompts: no_input_prompts
+      }
+    else
+      initial_prompts = [
+        { text_to_speech: initial_prompt }
+      ]
+
+      no_input_prompts = no_inputs.map do |no_input_prompt|
+        { text_to_speech: no_input_prompt }
+      end
+
+      {
+        initial_prompts: initial_prompts,
+        no_input_prompts: no_input_prompts
+      }
+    end
+  end
+
   private
 
   def build_response(conversation_token, expect_user_response, expected_input, final_response)
@@ -44,6 +104,43 @@ class GoogleAssistant
     {
       json: response.as_json
     }
+  end
+
+  def build_ask(input_prompt, possible_intents, dialog_state = nil)
+    if input_prompt.nil? || input_prompt.empty?
+      return handle_error("Invalid input prompt")
+    end
+
+    if input_prompt.is_a?(String)
+      input_prompt = build_input_prompt(is_ssml(input_prompt), input_prompt)
+    end
+
+    if dialog_state.nil?
+      dialog_state = {
+        state: "state", #(self.state instanceof State ? self.state.getName() : self.state),
+        data: "data" #self.data
+      }
+    end
+
+    expected_inputs = [{
+      input_prompt: input_prompt,
+      possible_intents: possible_intents
+    }]
+
+    build_response(
+      dialog_state.as_json,
+      true,
+      expected_inputs,
+      nil
+    )
+  end
+
+  def build_expected_intent(intent)
+    if intent.nil? || intent == ""
+      return handle_error("Invalid intent")
+    end
+
+    { intent: intent }
   end
 
   def is_ssml(text)
