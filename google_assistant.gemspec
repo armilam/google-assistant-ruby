@@ -7,6 +7,6 @@ Gem::Specification.new do |s|
   s.authors     = ["Aaron Milam"]
   s.email       = "armilam@gmail.com"
   s.files       = ["lib/google_assistant.rb", "lib/google_assistant/intent.rb"]
-  s.homepage    = "http://rubygems.org/gems/google_assistant"
+  s.homepage    = "https://github.com/armilam/google-assistant-ruby"
   s.license     = "MIT"
 end
