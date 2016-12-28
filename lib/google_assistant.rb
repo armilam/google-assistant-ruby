@@ -119,7 +119,7 @@ class GoogleAssistant
       dialog_state = {
         state: "state", #(self.state instanceof State ? self.state.getName() : self.state),
         data: "data" #self.data
-      }
+      }.as_json.to_s
     end
 
     expected_inputs = [{
@@ -128,7 +128,7 @@ class GoogleAssistant
     }]
 
     build_response(
-      dialog_state.as_json,
+      dialog_state,
       true,
       expected_inputs,
       nil
