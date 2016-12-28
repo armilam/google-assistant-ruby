@@ -16,7 +16,7 @@ Details to come. Basically, you can use this in rails like so:
 class GoogleAssistantController < ApplicationController
 
   def conversation
-    assistant_response = GoogleAssistant.new(params).respond_to do |assistant|
+    assistant_response = GoogleAssistant.new(params, response).respond_to do |assistant|
       assistant.intent.main do
         assistant.ask("<speak>I can speak! Can you hear me?</speak>")
       end
