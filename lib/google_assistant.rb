@@ -43,10 +43,10 @@ class GoogleAssistant
     end
 
     if dialog_state.nil?
-      dialog_state = {
-        state: "state", #(self.state instanceof State ? self.state.getName() : self.state),
-        data: "data" #self.data
-      }
+      # dialog_state = {
+      #   state: "state", #(self.state instanceof State ? self.state.getName() : self.state),
+      #   data: "data" #self.data
+      # }
     elsif dialog_state.is_a?(Array)
       return handle_error("Invalid dialog state")
     end
@@ -116,10 +116,10 @@ class GoogleAssistant
     end
 
     if dialog_state.nil?
-      dialog_state = {
-        state: "state", #(self.state instanceof State ? self.state.getName() : self.state),
-        data: "data" #self.data
-      }.as_json.to_s
+      # dialog_state = {
+      #   state: "state", #(self.state instanceof State ? self.state.getName() : self.state),
+      #   data: "data" #self.data
+      # }.to_json
     end
 
     expected_inputs = [{
