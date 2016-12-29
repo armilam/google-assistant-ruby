@@ -33,4 +33,4 @@ end
 
 Check out Google's instructions at https://developers.google.com/actions/develop/sdk/getting-started. You'll need to add an `actions.json` file, but Google's instructions pretty much cover deploying a Google Assistant action.
 
-Currently, this gem only supports `tell`. `ask` is coming soon.
+Check out https://github.com/armilam/google_assistant_example for a simple example of this gem in action.
