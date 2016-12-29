@@ -25,6 +25,12 @@ class GoogleAssistant
     @_intent ||= Intent.new(intent_string)
   end
 
+  def arguments
+    @_arguments ||= inputs[0]["arguments"].map do |argument|
+      Argument.new(argument)
+    end
+  end
+
   def conversation
     @_conversation ||= Conversation.new(conversation_params)
   end

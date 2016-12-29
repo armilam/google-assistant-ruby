@@ -18,6 +18,22 @@ class GoogleAssistant
       @token = parse_token(opts["conversation_token"])
     end
 
+    def data
+      if token.is_a?(Hash)
+        token["data"]
+      else
+        token
+      end
+    end
+
+    def state
+      if token.is_a?(Hash)
+        token["state"]
+      else
+        token
+      end
+    end
+
     private
 
     def parse_token(token)
