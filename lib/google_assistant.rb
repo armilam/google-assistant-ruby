@@ -6,7 +6,7 @@ class GoogleAssistant
   attr_reader :params
   attr_reader :response
 
-  INPUTS_MAX = 2
+  INPUTS_MAX = 1
 
   def initialize(params, response)
     @params = params

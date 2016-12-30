@@ -1,0 +1,28 @@
+{
+    "conversation": {
+        "conversation_id": "1234567890",
+        "conversation_token": "{\"state\":null,\"data\":{}}",
+        "type": 2
+    },
+    "inputs": [
+        {
+            "arguments": [
+                {
+                    "name": "text",
+                    "raw_text": "this is some input",
+                    "text_value": "this is some input"
+                }
+            ],
+            "intent": "assistant.intent.action.TEXT",
+            "raw_inputs": [
+                {
+                    "input_type": 2,
+                    "query": "this is some input"
+                }
+            ]
+        }
+    ],
+    "user": {
+        "user_id": "qwERtyUiopaSdfGhJklzXCVBNm/tF="
+    }
+}
