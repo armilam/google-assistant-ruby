@@ -125,4 +125,45 @@ describe GoogleAssistant do
       assert_equal("{\"state\":null,\"data\":{}}", conversation.raw_token)
     end
   end
+
+  describe "#tell" do
+
+    describe "when given an SSML message" do
+
+      it "returns a JSON hash response with SSML" do
+        message = "<speak>An SSML message</speak>"
+        response = subject.tell(message)
+
+        expected_response = {
+          json: {
+            expect_user_response: false,
+            final_response: {
+              speech_response: { ssml: message }
+            }
+          }
+        }
+
+        assert_equal(expected_response, subject.tell(message))
+      end
+    end
+
+    describe "when give a plain text message" do
+
+      it "returns a JSON hash response with text" do
+        message = "A plain text message"
+        response = subject.tell(message)
+
+        expected_response = {
+          json: {
+            expect_user_response: false,
+            final_response: {
+              speech_response: { text_to_speech: message }
+            }
+          }
+        }
+
+        assert_equal(expected_response, subject.tell(message))
+      end
+    end
+  end
 end

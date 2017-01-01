@@ -113,7 +113,7 @@ class GoogleAssistant
     response[:final_response] = final_response if !expect_user_response && final_response
 
     {
-      json: response.as_json
+      json: response
     }
   end
 
