@@ -1,6 +1,7 @@
 require "minitest/autorun"
 require "test_helper"
 require "google_assistant"
+require "google_assistant/intent"
 
 describe GoogleAssistant do
   include TestHelper
@@ -63,6 +64,27 @@ describe GoogleAssistant do
         end
 
         assert_equal("text", called_block)
+      end
+    end
+  end
+
+  describe "#intent" do
+
+    describe "with a MAIN intent request" do
+      let(:params) { load_json_fixture(:main_intent_request) }
+
+      it "returns an instance of Intent with MAIN intent" do
+        assert_equal(GoogleAssistant::Intent, subject.intent.class)
+        assert_equal(GoogleAssistant::StandardIntents::MAIN, subject.intent.intent_string)
+      end
+    end
+
+    describe "with a TEXT intent request" do
+      let(:params) { load_json_fixture(:text_intent_request) }
+
+      it "returns an instance of Intent with TEXT intent" do
+        assert_equal(GoogleAssistant::Intent, subject.intent.class)
+        assert_equal(GoogleAssistant::StandardIntents::TEXT, subject.intent.intent_string)
       end
     end
   end
