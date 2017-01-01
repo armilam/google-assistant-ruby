@@ -88,4 +88,41 @@ describe GoogleAssistant do
       end
     end
   end
+
+  describe "#arguments" do
+
+    describe "when the arguments list is empty" do
+      let(:params) { load_json_fixture(:empty_arguments_request) }
+
+      it "returns an empty array" do
+        assert_equal([], subject.arguments)
+      end
+    end
+
+    describe "when there is one argument" do
+      let(:params) { load_json_fixture(:single_argument_request) }
+
+      it "returns a single-item array containing an Argument object" do
+        assert_equal(1, subject.arguments.size)
+
+        argument = subject.arguments.first
+
+        assert_equal("text", argument.name)
+        assert_equal("this is some raw text", argument.raw_text)
+        assert_equal("this is a text value", argument.text_value)
+      end
+    end
+  end
+
+  describe "#conversation" do
+    let(:params) { load_json_fixture(:text_intent_request) }
+
+    it "returns a Conversation object with the given params" do
+      conversation = subject.conversation
+
+      assert_equal("1234567890", conversation.id)
+      assert_equal(2, conversation.type)
+      assert_equal("{\"state\":null,\"data\":{}}", conversation.raw_token)
+    end
+  end
 end

@@ -1,0 +1,21 @@
+{
+    "conversation": {
+        "conversation_id": "1234567890",
+        "type": 1
+    },
+    "inputs": [
+        {
+            "arguments": [],
+            "intent": "assistant.intent.action.MAIN",
+            "raw_inputs": [
+                {
+                    "input_type": 2,
+                    "query": "Google Assistant Ruby Test"
+                }
+            ]
+        }
+    ],
+    "user": {
+        "user_id": "qwERtyUiopaSdfGhJklzXCVBNm/tF="
+    }
+}

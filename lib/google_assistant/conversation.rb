@@ -10,11 +10,12 @@ class GoogleAssistant
       ARCHIVED = 4
     end
 
-    attr_reader :id, :type, :token
+    attr_reader :id, :type, :raw_token, :token
 
     def initialize(opts)
       @id = opts["conversation_id"]
       @type = opts["type"]
+      @raw_token = opts["conversation_token"]
       @token = parse_token(opts["conversation_token"])
     end
 
