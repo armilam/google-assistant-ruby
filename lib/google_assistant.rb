@@ -64,7 +64,17 @@ class GoogleAssistant
 
     expected_intent = build_expected_intent(StandardIntents::TEXT)
 
-    build_ask(input_prompt, [expected_intent], dialog_state)
+    expected_inputs = [{
+      input_prompt: input_prompt,
+      possible_intents: [expected_intent]
+    }]
+
+    build_response(
+      dialog_state,
+      true,
+      expected_inputs,
+      nil
+    )
   end
 
   def build_input_prompt(is_ssml, initial_prompt, no_inputs = [])
@@ -115,32 +125,6 @@ class GoogleAssistant
     {
       json: response
     }
-  end
-
-  def build_ask(input_prompt, possible_intents, dialog_state = nil)
-    if input_prompt.nil? || input_prompt.empty?
-      return handle_error("Invalid input prompt")
-    end
-
-    if input_prompt.is_a?(String)
-      input_prompt = build_input_prompt(is_ssml(input_prompt), input_prompt)
-    end
-
-    if dialog_state.nil?
-      dialog_state = { state: nil, data: {} }.to_json
-    end
-
-    expected_inputs = [{
-      input_prompt: input_prompt,
-      possible_intents: possible_intents
-    }]
-
-    build_response(
-      dialog_state,
-      true,
-      expected_inputs,
-      nil
-    )
   end
 
   def build_expected_intent(intent)

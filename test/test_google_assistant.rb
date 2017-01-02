@@ -132,7 +132,6 @@ describe GoogleAssistant do
 
       it "returns a JSON hash response with SSML" do
         message = "<speak>An SSML message</speak>"
-        response = subject.tell(message)
 
         expected_response = {
           json: {
@@ -147,11 +146,10 @@ describe GoogleAssistant do
       end
     end
 
-    describe "when give a plain text message" do
+    describe "when given a plain text message" do
 
       it "returns a JSON hash response with text" do
         message = "A plain text message"
-        response = subject.tell(message)
 
         expected_response = {
           json: {
@@ -163,6 +161,126 @@ describe GoogleAssistant do
         }
 
         assert_equal(expected_response, subject.tell(message))
+      end
+    end
+  end
+
+  describe "#ask" do
+
+    describe "when given a nil input prompt" do
+
+      it "raises an error" do
+        assert_raises RuntimeError do
+          subject.ask(nil)
+        end
+      end
+    end
+
+    describe "when given an SSML string input prompt" do
+
+      it "returns a JSON hash response with SSML" do
+        response = subject.ask("<speak>Some SSML input prompt</speak>")
+
+        expected_response = {
+          json: {
+            conversation_token: "{\"state\":null,\"data\":{}}",
+            expect_user_response: true,
+            expected_inputs: [
+              {
+                input_prompt: {
+                  initial_prompts: [{ ssml: "<speak>Some SSML input prompt</speak>" }],
+                  no_input_prompts: []
+                },
+                possible_intents: [{ intent: "assistant.intent.action.TEXT" }]
+              }
+            ]
+          }
+        }
+
+        assert_equal(expected_response, response)
+      end
+    end
+
+    describe "when given a plain text string input prompt" do
+
+      it "returns a JSON hash response with text" do
+        response = subject.ask("Some text input prompt")
+
+        expected_response = {
+          json: {
+            conversation_token: "{\"state\":null,\"data\":{}}",
+            expect_user_response: true,
+            expected_inputs: [
+              {
+                input_prompt: {
+                  initial_prompts: [{ text_to_speech: "Some text input prompt" }],
+                  no_input_prompts: []
+                },
+                possible_intents: [{ intent: "assistant.intent.action.TEXT" }]
+              }
+            ]
+          }
+        }
+
+        assert_equal(expected_response, response)
+      end
+    end
+
+    describe "when given a hash input prompt" do
+
+      it "returns a JSON hash response" do
+        input_prompt = { input_prompt: :some_input_prompt }
+        response = subject.ask(input_prompt)
+
+        expected_response = {
+          json: {
+            conversation_token: "{\"state\":null,\"data\":{}}",
+            expect_user_response: true,
+            expected_inputs: [
+              {
+                input_prompt: input_prompt,
+                possible_intents: [{ intent: "assistant.intent.action.TEXT" }]
+              }
+            ]
+          }
+        }
+
+        assert_equal(expected_response, response)
+      end
+    end
+
+    describe "when given a nil dialog state" do
+
+      it "builds a default blank state" do
+        dialog_state = "{\"state\":null,\"data\":{\"something_interesting\":\"test value\"}}"
+        response = subject.ask("Some input prompt", dialog_state)
+
+        expected_response = {
+          json: {
+            conversation_token: dialog_state,
+            expect_user_response: true,
+            expected_inputs: [
+              {
+                input_prompt:  {
+                  initial_prompts: [{ text_to_speech: "Some input prompt" }],
+                  no_input_prompts: []
+                },
+                possible_intents: [{ intent: "assistant.intent.action.TEXT" }]
+              }
+            ]
+          }
+        }
+
+        assert_equal(expected_response, response)
+      end
+    end
+
+    describe "when given an array dialog state" do
+
+      it "raises an error" do
+        assert_raises RuntimeError do
+          subject.ask("input", [])
+        end
       end
     end
   end
