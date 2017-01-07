@@ -12,10 +12,12 @@ class GoogleAssistant
 
     attr_reader :id, :type, :raw_token, :token
 
+    DEFAULT_CONVERSATION_TOKEN = { state: nil, data: {} }
+
     def initialize(opts)
       @id = opts["conversation_id"]
       @type = opts["type"]
-      @raw_token = opts["conversation_token"]
+      @raw_token = opts["conversation_token"] || { state: nil, data: {} }.to_json
       @token = parse_token(opts["conversation_token"])
     end
 
@@ -35,6 +37,8 @@ class GoogleAssistant
 
     def parse_token(token)
       JSON.parse(token)
+    rescue JSON::ParserError, TypeError
+      DEFAULT_CONVERSATION_TOKEN
     end
   end
 end
