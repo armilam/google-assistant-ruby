@@ -284,4 +284,35 @@ describe GoogleAssistant do
       end
     end
   end
+
+  describe "#build_input_prompt" do
+
+    describe "when is_ssml is true" do
+
+      it "returns a hash with ssml" do
+        prompt = subject.build_input_prompt(true, "<speak>Say something</speak>", ["<speak>Did you say something?</speak>"])
+
+        expected_prompt = {
+          initial_prompts: [{ ssml: "<speak>Say something</speak>" }],
+          no_input_prompts: [{ ssml: "<speak>Did you say something?</speak>" }]
+        }
+
+        assert_equal(expected_prompt, prompt)
+      end
+    end
+
+    describe "when is_ssml is false" do
+
+      it "returns a hash with text_to_speech" do
+        prompt = subject.build_input_prompt(false, "Say something", ["Did you say something?"])
+
+        expected_prompt = {
+          initial_prompts: [{ text_to_speech: "Say something" }],
+          no_input_prompts: [{ text_to_speech: "Did you say something?" }]
+        }
+
+        assert_equal(expected_prompt, prompt)
+      end
+    end
+  end
 end

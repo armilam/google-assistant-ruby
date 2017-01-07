@@ -6,8 +6,6 @@ class GoogleAssistant
   attr_reader :params
   attr_reader :response
 
-  INPUTS_MAX = 1
-
   def initialize(params, response)
     @params = params
     @response = response
@@ -78,11 +76,6 @@ class GoogleAssistant
   end
 
   def build_input_prompt(is_ssml, initial_prompt, no_inputs = [])
-    if no_inputs&.size > INPUTS_MAX
-      handle_error("Invalid number of no inputs")
-      return nil
-    end
-
     if is_ssml
       initial_prompts = [
         { ssml: initial_prompt }
