@@ -10,35 +10,28 @@ class GoogleAssistant
       ARCHIVED = 4
     end
 
-    attr_reader :id, :type, :raw_token, :token
-
-    DEFAULT_CONVERSATION_TOKEN = { state: nil, data: {} }
+    attr_reader :id, :type, :raw_token, :token, :dialog_state
 
     def initialize(opts)
       @id = opts["conversation_id"]
       @type = opts["type"]
-      @raw_token = opts["conversation_token"] || { state: nil, data: {} }.to_json
-      @token = parse_token(opts["conversation_token"])
-    end
-
-    def data
-      token["data"] ||= {}
+      @dialog_state = DialogState.new(opts["conversation_token"])
     end
 
     def state
-      token["state"]
+      dialog_state.state
     end
 
     def state=(state)
-      token["state"] = state
+      dialog_state.state = state
     end
 
-    private
+    def data
+      dialog_state.data
+    end
 
-    def parse_token(token)
-      JSON.parse(token)
-    rescue JSON::ParserError, TypeError
-      DEFAULT_CONVERSATION_TOKEN
+    def data=(data)
+      dialog_state.data = data
     end
   end
 end

@@ -45,19 +45,13 @@ class GoogleAssistant
     build_response(nil, false, nil, final_response)
   end
 
-  def ask(input_prompt, dialog_state = nil)
+  def ask(input_prompt)
     if input_prompt.nil?
       return handle_error("Invalid input prompt")
     end
 
     if input_prompt.is_a?(String)
       input_prompt = build_input_prompt(is_ssml(input_prompt), input_prompt)
-    end
-
-    if dialog_state.nil?
-      dialog_state = DialogState.new
-    elsif !dialog_state.is_a?(DialogState)
-      return handle_error("Invalid dialog state")
     end
 
     expected_intent = build_expected_intent(StandardIntents::TEXT)
@@ -68,7 +62,7 @@ class GoogleAssistant
     }]
 
     build_response(
-      dialog_state,
+      conversation.dialog_state,
       true,
       expected_inputs,
       nil
