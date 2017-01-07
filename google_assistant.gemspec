@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = "google_assistant"
-  s.version     = "0.0.5"
+  s.version     = "0.0.6"
   s.date        = "2016-12-26"
   s.summary     = "Ruby SDK for the Google Assistant API"
   s.description = "Ruby SDK for the Google Assistant API"
