@@ -33,10 +33,6 @@ class GoogleAssistant
     @_conversation ||= Conversation.new(conversation_params)
   end
 
-  def dialog_state
-    @_dialog_state ||= DialogState.new(params["conversation_token"])
-  end
-
   def tell(message)
     final_response = { speech_response: {} }
 

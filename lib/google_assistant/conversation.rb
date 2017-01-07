@@ -20,27 +20,21 @@ class GoogleAssistant
     end
 
     def data
-      if token.is_a?(Hash)
-        token["data"]
-      else
-        token
-      end
+      token["data"] ||= {}
     end
 
     def state
-      if token.is_a?(Hash)
-        token["state"]
-      else
-        token
-      end
+      token["state"]
+    end
+
+    def state=(state)
+      token["state"] = state
     end
 
     private
 
     def parse_token(token)
       JSON.parse(token)
-    rescue JSON::ParserError, TypeError
-      token
     end
   end
 end
