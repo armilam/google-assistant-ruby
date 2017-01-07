@@ -33,6 +33,10 @@ class GoogleAssistant
     @_conversation ||= Conversation.new(conversation_params)
   end
 
+  def dialog_state
+    @_dialog_state ||= DialogState.new(params["conversation_token"])
+  end
+
   def tell(message)
     final_response = { speech_response: {} }
 
@@ -55,8 +59,8 @@ class GoogleAssistant
     end
 
     if dialog_state.nil?
-      dialog_state = { state: nil, data: {} }.to_json
-    elsif dialog_state.is_a?(Array)
+      dialog_state = DialogState.new
+    elsif !dialog_state.is_a?(DialogState)
       return handle_error("Invalid dialog state")
     end
 
@@ -107,10 +111,10 @@ class GoogleAssistant
 
   private
 
-  def build_response(conversation_token, expect_user_response, expected_input, final_response)
+  def build_response(dialog_state, expect_user_response, expected_input, final_response)
     response = {}
 
-    response[:conversation_token] = conversation_token if conversation_token
+    response[:conversation_token] = dialog_state.to_json if dialog_state
     response[:expect_user_response] = expect_user_response
     response[:expected_inputs] = expected_input if expected_input
     response[:final_response] = final_response if !expect_user_response && final_response

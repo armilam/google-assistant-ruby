@@ -2,6 +2,7 @@ require "minitest/autorun"
 require "test_helper"
 require "google_assistant"
 require "google_assistant/intent"
+require "google_assistant/dialog_state"
 
 describe GoogleAssistant do
   include TestHelper
@@ -252,12 +253,12 @@ describe GoogleAssistant do
     describe "when given a nil dialog state" do
 
       it "builds a default blank state" do
-        dialog_state = "{\"state\":null,\"data\":{\"something_interesting\":\"test value\"}}"
+        dialog_state = GoogleAssistant::DialogState.new({ "state" => nil, "data" => { "something_interesting" => "test value" } })
         response = subject.ask("Some input prompt", dialog_state)
 
         expected_response = {
           json: {
-            conversation_token: dialog_state,
+            conversation_token: dialog_state.to_json,
             expect_user_response: true,
             expected_inputs: [
               {
