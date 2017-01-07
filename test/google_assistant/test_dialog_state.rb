@@ -5,11 +5,57 @@ describe GoogleAssistant::DialogState do
   let(:state_hash) { { "state" => "some state", "data" => { "some data" => "a value" } } }
   subject { GoogleAssistant::DialogState.new(state_hash) }
 
+  describe "#initialize" do
+
+    describe "when given a string" do
+      let(:state_hash) { "{\"state\":\"a state\",\"data\":{\"data key\":\"data value\"}}" }
+
+      it "parses the string to a hash" do
+        assert_equal("a state", subject.state)
+        assert_equal({ "data key" => "data value" }, subject.data)
+      end
+
+      describe "when the string cannot be parsed as JSON" do
+        let(:state_hash) { "this is definitely not a hash" }
+
+        it "uses the default state" do
+          assert_nil(subject.state)
+          assert_equal({}, subject.data)
+        end
+      end
+    end
+
+    describe "when given a hash" do
+      let(:state_hash) { { "state" => "a state", "data" => { "data key" => "data value"} } }
+
+      it "uses the hash for the state and data" do
+        assert_equal("a state", subject.state)
+        assert_equal({ "data key" => "data value" }, subject.data)
+      end
+    end
+
+    describe "when not given a state or conversation token" do
+      let(:state_hash) { nil }
+
+      it "uses the default state" do
+        assert_nil(subject.state)
+        assert_equal({}, subject.data)
+      end
+    end
+  end
+
   describe "#state" do
 
     it "returns the state" do
       assert_equal(state_hash["state"], subject.state)
-      assert_equal(state_hash["data"], subject.data)
+    end
+  end
+
+  describe "#state=" do
+
+    it "set the state" do
+      subject.state = "a new state"
+      assert_equal("a new state", subject.state)
     end
   end
 

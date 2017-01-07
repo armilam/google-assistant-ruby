@@ -123,7 +123,7 @@ describe GoogleAssistant do
 
       assert_equal("1234567890", conversation.id)
       assert_equal(2, conversation.type)
-      assert_equal("{\"state\":null,\"data\":{}}", conversation.raw_token)
+      assert_equal(GoogleAssistant::DialogState, conversation.dialog_state.class)
     end
   end
 
@@ -250,15 +250,17 @@ describe GoogleAssistant do
       end
     end
 
-    describe "when given a nil dialog state" do
+    describe "when the conversation dialog state has data" do
 
-      it "builds a default blank state" do
-        dialog_state = GoogleAssistant::DialogState.new({ "state" => nil, "data" => { "something_interesting" => "test value" } })
-        response = subject.ask("Some input prompt", dialog_state)
+      it "includes the state and data" do
+        dialog_state = subject.conversation.dialog_state
+        dialog_state.state = "a state"
+        dialog_state.data = { "a data key" => "the data value" }
+        response = subject.ask("Some input prompt")
 
         expected_response = {
           json: {
-            conversation_token: dialog_state.to_json,
+            conversation_token: { state: "a state", data: { "a data key" => "the data value" } }.to_json,
             expect_user_response: true,
             expected_inputs: [
               {
@@ -273,15 +275,6 @@ describe GoogleAssistant do
         }
 
         assert_equal(expected_response, response)
-      end
-    end
-
-    describe "when given an array dialog state" do
-
-      it "raises an error" do
-        assert_raises RuntimeError do
-          subject.ask("input", [])
-        end
       end
     end
   end

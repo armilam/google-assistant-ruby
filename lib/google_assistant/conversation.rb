@@ -10,7 +10,7 @@ class GoogleAssistant
       ARCHIVED = 4
     end
 
-    attr_reader :id, :type, :raw_token, :token, :dialog_state
+    attr_reader :id, :type, :dialog_state
 
     def initialize(opts)
       @id = opts["conversation_id"]

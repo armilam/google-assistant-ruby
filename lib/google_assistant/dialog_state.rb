@@ -2,7 +2,7 @@
 
 class GoogleAssistant
   class DialogState
-    DEFAULT_STATE = { "state" => nil, "data" => {} }
+    DEFAULT_STATE = { "state" => nil, "data" => {} }.freeze
 
     def initialize(state_hash_or_conversation_token = nil)
       if state_hash_or_conversation_token.is_a?(String)
@@ -11,7 +11,7 @@ class GoogleAssistant
       elsif state_hash_or_conversation_token.is_a?(Hash)
         @state_hash = state_hash_or_conversation_token
       else
-        @state_hash = DEFAULT_STATE
+        @state_hash = DEFAULT_STATE.dup
       end
     end
 
@@ -44,7 +44,7 @@ class GoogleAssistant
     def parse_token(token)
       JSON.parse(token)
     rescue JSON::ParserError, TypeError
-      DEFAULT_STATE
+      DEFAULT_STATE.dup
     end
   end
 end
