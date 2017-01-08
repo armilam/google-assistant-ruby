@@ -115,7 +115,7 @@ class GoogleAssistant
   end
 
   def build_expected_intent(intent)
-    if intent.nil? || intent == ""
+    if intent.nil? || intent.empty?
       return handle_error("Invalid intent")
     end
 
