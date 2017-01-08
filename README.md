@@ -53,7 +53,7 @@ end
 
 ## Usage
 
-GoogleAssistant parses the request from the Google Assistant API and helps you build your response. It takes the `params` and `request` objects in Rails and Sinatra.
+GoogleAssistant parses the request from the Google Assistant API and helps you build your response. It takes the `params` and `response` objects in Rails and Sinatra.
 
 ```rb
 assistant_response = GoogleAssistant.new(params, response).respond_to do |assistant|
@@ -176,8 +176,49 @@ end
 
 SSML is Google Assistant's markup language for text to speech. It provides options to pause, interpret dates and numbers, and more. You can provide SSML responses or plain text. See [Google's documentation on SSML](https://developers.google.com/actions/reference/ssml).
 
-### More information
+### Testing your assistant
 
-Check out Google's instructions at https://developers.google.com/actions/develop/sdk/getting-started. You'll need to add an `actions.json` file, but Google's instructions pretty much cover deploying a Google Assistant action.
+You can use any hosting platform.
+
+1. [Download the `gactions` CLI](https://developers.google.com/actions/tools/gactions-cli) and add it to your PATH.
+    - Or if you'd rather not put it in your path, you'll simply need to call it by referencing its full path.
+2. Visit the [Google Cloud Console projects page](https://console.cloud.google.com/project). Create a project and make note of the project ID for configuration and deployment.
+3. Deploy your app to the web. Heroku is a good choice. See [Heroku's documentation](https://devcenter.heroku.com/articles/getting-started-with-ruby#introduction) for more info on how to do this.
+4. Add an `actions.json` file at the root of your project.
+
+    ```json
+    {
+      "versionLabel": "1.0.0",
+      "agentInfo": {
+        "languageCode": "en-US",
+        "projectId": "your-project-id",
+        "voiceName": "male_1"
+      },
+      "actions": [
+        {
+          "initialTrigger": {
+            "intent": "assistant.intent.action.MAIN"
+          },
+          "httpExecution": {
+            "url": "https://yourapp.domain.com/path-to-your-assistant"
+          }
+        }
+      ]
+    }
+    ```
+
+5. Run the following command from the root directory of your project. The `invocation_name` is what you will use to activate your assistant. For example, "OK Google, talk to my action". Name it something unique.
+
+    ```
+    gactions preview -action_package=action.json -invocation_name="my action"
+    ```
+
+    - `gactions` will ask to access your account and Google developer project. Follow the onscreen instructions to do so.
+
+6. Use the [web simulator](https://developers.google.com/actions/tools/web-simulator) to simulate. Or better yet, if your Google Home device is logged into the same account you're using to build your action, you can say "OK Google, talk to my action" to test it out directly on your device.
+
+## More information
+
+Check out Google's instructions at https://developers.google.com/actions/develop/sdk/getting-started for more detail on writing and testing a Google Assistant action.
 
 Check out https://github.com/armilam/google_assistant_example for a simple example of this gem in action.
