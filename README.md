@@ -184,14 +184,14 @@ You can use any hosting platform.
     - Or if you'd rather not put it in your path, you'll simply need to call it by referencing its full path.
 2. Visit the [Google Cloud Console projects page](https://console.cloud.google.com/project). Create a project and make note of the project ID for configuration and deployment.
 3. Deploy your app to the web. Heroku is a good choice. See [Heroku's documentation](https://devcenter.heroku.com/articles/getting-started-with-ruby#introduction) for more info on how to do this.
-4. Add an `actions.json` file at the root of your project.
+4. Add an `action.json` file at the root of your project.
 
     ```json
     {
       "versionLabel": "1.0.0",
       "agentInfo": {
         "languageCode": "en-US",
-        "projectId": "your-project-id",
+        "projectId": "your-google-project-id",
         "voiceName": "male_1"
       },
       "actions": [
