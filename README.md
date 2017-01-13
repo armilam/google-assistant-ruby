@@ -30,7 +30,7 @@ Write your controller to handle the request. Use GoogleAssistant to respond to t
 class GoogleAssistantController < ApplicationController
 
   def conversation
-    assistant_response = GoogleAssistant.new(params, response).respond_to do |assistant|
+    assistant_response = GoogleAssistant.respond_to(params, response) do |assistant|
       assistant.intent.main do
         assistant.ask(
           prompt: "<speak>Hi there! Say something, please.</speak>",
@@ -56,7 +56,7 @@ end
 GoogleAssistant parses the request from the Google Assistant API and helps you build your response. It takes the `params` and `response` objects in Rails and Sinatra.
 
 ```rb
-assistant_response = GoogleAssistant.new(params, response).respond_to do |assistant|
+assistant_response = GoogleAssistant.respond_to(params, response) do |assistant|
   # Response logic goes here
 end
 ```
@@ -64,7 +64,7 @@ end
 The Google Assistant API sends a request using the `MAIN` intent for the initial request from the user. This is when the user says "OK Google, talk to #{name_of_your_app}".
 
 ```rb
-assistant_response = GoogleAssistant.new(params, response).respond_to do |assistant|
+assistant_response = GoogleAssistant.respond_to(params, response) do |assistant|
   assistant.intent.main do
     # Initial request's response goes here. You may want to introduce the app here.
   end
@@ -74,7 +74,7 @@ end
 The Google Assistant API sends a request using the `TEXT` intent for subsequent requests from the user. When your app asks for input from the user, the conversation continues. When the user finishes the conversation with "Goodbye" or your app finishes the conversation with a `tell` response, the conversation ends and any new conversations start again with the `MAIN` intent.
 
 ```rb
-assistant_response = GoogleAssistant.new(params, response).respond_to do |assistant|
+assistant_response = GoogleAssistant.respond_to(params, response) do |assistant|
   assistant.intent.text do
     # Respond to user input here.
   end
@@ -133,7 +133,7 @@ You can keep data on the Conversation object. This data will be sent to the Goog
 You can also send a state value with your responses to keep track of where your conversation is at.
 
 ```rb
-GoogleAssistant.new(params, response).respond_to do |assistant|
+GoogleAssistant.respond_to(params, response) do |assistant|
   assistant.intent.main do
     assistant.conversation.state = "asking favorite color"
 
