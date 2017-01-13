@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 Dir["#{File.dirname(__FILE__)}/google_assistant/**/*.rb"].each { |file| require file }
+require "json"
 
 class GoogleAssistant
   attr_reader :params
@@ -36,7 +37,7 @@ class GoogleAssistant
   def tell(message)
     final_response = { speech_response: {} }
 
-    if is_ssml(message)
+    if is_ssml?(message)
       final_response[:speech_response][:ssml] = message
     else
       final_response[:speech_response][:text_to_speech] = message
@@ -45,19 +46,17 @@ class GoogleAssistant
     build_response(nil, false, nil, final_response)
   end
 
-  def ask(input_prompt)
-    if input_prompt.nil?
-      return handle_error("Invalid input prompt")
-    end
+  def ask(prompt:, no_input_prompt: [])
+    return handle_error("Invalid input prompt") if prompt.nil?
 
-    if input_prompt.is_a?(String)
-      input_prompt = build_input_prompt(is_ssml(input_prompt), input_prompt)
-    end
+    no_input_prompt = [*no_input_prompt].compact
+
+    prompt = build_input_prompt(prompt, no_input_prompt)
 
     expected_intent = build_expected_intent(StandardIntents::TEXT)
 
     expected_inputs = [{
-      input_prompt: input_prompt,
+      input_prompt: prompt,
       possible_intents: [expected_intent]
     }]
 
@@ -69,37 +68,22 @@ class GoogleAssistant
     )
   end
 
-  def build_input_prompt(is_ssml, initial_prompt, no_inputs = [])
-    if is_ssml
-      initial_prompts = [
-        { ssml: initial_prompt }
-      ]
-
-      no_input_prompts = no_inputs.map do |no_input_prompt|
-        { ssml: no_input_prompt }
-      end
-
-      {
-        initial_prompts: initial_prompts,
-        no_input_prompts: no_input_prompts
-      }
-    else
-      initial_prompts = [
-        { text_to_speech: initial_prompt }
-      ]
-
-      no_input_prompts = no_inputs.map do |no_input_prompt|
-        { text_to_speech: no_input_prompt }
-      end
-
-      {
-        initial_prompts: initial_prompts,
-        no_input_prompts: no_input_prompts
-      }
-    end
-  end
-
   private
+
+  def build_input_prompt(initial_prompt, no_inputs = [])
+    initial_prompts = [
+      { prompt_type(initial_prompt) => initial_prompt }
+    ]
+
+    no_input_prompts = no_inputs.map do |prompt|
+      { prompt_type(prompt) => prompt }
+    end
+
+    {
+      initial_prompts: initial_prompts,
+      no_input_prompts: no_input_prompts
+    }
+  end
 
   def build_response(dialog_state, expect_user_response, expected_input, final_response)
     response = {}
@@ -115,20 +99,19 @@ class GoogleAssistant
   end
 
   def build_expected_intent(intent)
-    if intent.nil? || intent.empty?
-      return handle_error("Invalid intent")
-    end
+    return handle_error("Invalid intent") if intent.nil? || intent.empty?
 
     { intent: intent }
   end
 
-  def is_ssml(text)
-    if text.nil?
-      handle_error("Missing text")
-      return false
-    end
+  def is_ssml?(text)
+    return handle_error("Missing text") if text.nil?
 
     text =~ /^<speak\b[^>]*>(.*?)<\/speak>$/
+  end
+
+  def prompt_type(text)
+    is_ssml?(text) ? :ssml : :text_to_speech
   end
 
   def inputs

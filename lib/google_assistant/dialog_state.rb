@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "json"
+
 class GoogleAssistant
   class DialogState
     DEFAULT_STATE = { "state" => nil, "data" => {} }.freeze
