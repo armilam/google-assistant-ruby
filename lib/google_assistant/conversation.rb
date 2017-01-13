@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class GoogleAssistant
+module GoogleAssistant
   class Conversation
     class Type
       TYPE_UNSPECIFIED = 0

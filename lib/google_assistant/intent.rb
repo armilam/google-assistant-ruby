@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class GoogleAssistant
+module GoogleAssistant
   class StandardIntents
 
     # Assistant fires MAIN intent for queries like [talk to $action].

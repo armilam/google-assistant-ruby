@@ -1,4 +1,4 @@
-class GoogleAssistant
+module GoogleAssistant
   class Argument
     attr_reader :name, :raw_text, :text_value
 

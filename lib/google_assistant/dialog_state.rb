@@ -2,7 +2,7 @@
 
 require "json"
 
-class GoogleAssistant
+module GoogleAssistant
   class DialogState
     DEFAULT_STATE = { "state" => nil, "data" => {} }.freeze
 
