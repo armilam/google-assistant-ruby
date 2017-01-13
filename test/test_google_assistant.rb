@@ -172,7 +172,7 @@ describe GoogleAssistant do
 
       it "raises an error" do
         assert_raises RuntimeError do
-          subject.ask(nil)
+          subject.ask(prompt: nil, no_input_prompt: nil)
         end
       end
     end
@@ -180,7 +180,7 @@ describe GoogleAssistant do
     describe "when given an SSML string input prompt" do
 
       it "returns a JSON hash response with SSML" do
-        response = subject.ask("<speak>Some SSML input prompt</speak>")
+        response = subject.ask(prompt: "<speak>Some SSML input prompt</speak>")
 
         expected_response = {
           json: {
@@ -205,7 +205,7 @@ describe GoogleAssistant do
     describe "when given a plain text string input prompt" do
 
       it "returns a JSON hash response with text" do
-        response = subject.ask("Some text input prompt")
+        response = subject.ask(prompt: "Some text input prompt")
 
         expected_response = {
           json: {
@@ -227,36 +227,13 @@ describe GoogleAssistant do
       end
     end
 
-    describe "when given a hash input prompt" do
-
-      it "returns a JSON hash response" do
-        input_prompt = { input_prompt: :some_input_prompt }
-        response = subject.ask(input_prompt)
-
-        expected_response = {
-          json: {
-            conversation_token: "{\"state\":null,\"data\":{}}",
-            expect_user_response: true,
-            expected_inputs: [
-              {
-                input_prompt: input_prompt,
-                possible_intents: [{ intent: "assistant.intent.action.TEXT" }]
-              }
-            ]
-          }
-        }
-
-        assert_equal(expected_response, response)
-      end
-    end
-
     describe "when the conversation dialog state has data" do
 
       it "includes the state and data" do
         dialog_state = subject.conversation.dialog_state
         dialog_state.state = "a state"
         dialog_state.data = { "a data key" => "the data value" }
-        response = subject.ask("Some input prompt")
+        response = subject.ask(prompt: "Some input prompt")
 
         expected_response = {
           json: {
@@ -277,35 +254,66 @@ describe GoogleAssistant do
         assert_equal(expected_response, response)
       end
     end
-  end
 
-  describe "#build_input_prompt" do
+    describe "when given a string no_input_prompt" do
 
-    describe "when is_ssml is true" do
+      it "returns a JSON hash response with text" do
+        response = subject.ask(
+          prompt: "Some text input prompt",
+          no_input_prompt: "A no input prompt"
+        )
 
-      it "returns a hash with ssml" do
-        prompt = subject.build_input_prompt(true, "<speak>Say something</speak>", ["<speak>Did you say something?</speak>"])
-
-        expected_prompt = {
-          initial_prompts: [{ ssml: "<speak>Say something</speak>" }],
-          no_input_prompts: [{ ssml: "<speak>Did you say something?</speak>" }]
+        expected_response = {
+          json: {
+            conversation_token: "{\"state\":null,\"data\":{}}",
+            expect_user_response: true,
+            expected_inputs: [
+              {
+                input_prompt: {
+                  initial_prompts: [{ text_to_speech: "Some text input prompt" }],
+                  no_input_prompts: [{ text_to_speech: "A no input prompt" }]
+                },
+                possible_intents: [{ intent: "assistant.intent.action.TEXT" }]
+              }
+            ]
+          }
         }
 
-        assert_equal(expected_prompt, prompt)
+        assert_equal(expected_response, response)
       end
     end
 
-    describe "when is_ssml is false" do
+    describe "when given an array of strings for no_input_prompt" do
 
-      it "returns a hash with text_to_speech" do
-        prompt = subject.build_input_prompt(false, "Say something", ["Did you say something?"])
+      it "returns a JSON hash response with text" do
+        response = subject.ask(
+          prompt: "Some text input prompt",
+          no_input_prompt: [
+            "A no input prompt",
+            "<speak>Yet another no input prompt</speak>"
+          ]
+        )
 
-        expected_prompt = {
-          initial_prompts: [{ text_to_speech: "Say something" }],
-          no_input_prompts: [{ text_to_speech: "Did you say something?" }]
+        expected_response = {
+          json: {
+            conversation_token: "{\"state\":null,\"data\":{}}",
+            expect_user_response: true,
+            expected_inputs: [
+              {
+                input_prompt: {
+                  initial_prompts: [{ text_to_speech: "Some text input prompt" }],
+                  no_input_prompts: [
+                    { text_to_speech: "A no input prompt" },
+                    { ssml: "<speak>Yet another no input prompt</speak>" }
+                  ]
+                },
+                possible_intents: [{ intent: "assistant.intent.action.TEXT" }]
+              }
+            ]
+          }
         }
 
-        assert_equal(expected_prompt, prompt)
+        assert_equal(expected_response, response)
       end
     end
   end
