@@ -4,6 +4,12 @@ Dir["#{File.dirname(__FILE__)}/google_assistant/**/*.rb"].each { |file| require 
 require "json"
 
 class GoogleAssistant
+  InvalidIntent = Class.new(StandardError)
+  InvalidMessage = Class.new(StandardError)
+  InvalidInputPrompt = Class.new(StandardError)
+  MissingRequestInputs = Class.new(StandardError)
+  MissingRequestIntent = Class.new(StandardError)
+
   attr_reader :params
   attr_reader :response
 
@@ -35,6 +41,8 @@ class GoogleAssistant
   end
 
   def tell(message)
+    raise InvalidMessage if message.nil? || message.empty?
+
     final_response = { speech_response: {} }
 
     if is_ssml?(message)
@@ -47,7 +55,7 @@ class GoogleAssistant
   end
 
   def ask(prompt:, no_input_prompt: [])
-    return handle_error("Invalid input prompt") if prompt.nil?
+    raise InvalidInputPrompt if prompt.nil? || prompt.empty?
 
     no_input_prompt = [*no_input_prompt].compact
 
@@ -99,14 +107,12 @@ class GoogleAssistant
   end
 
   def build_expected_intent(intent)
-    return handle_error("Invalid intent") if intent.nil? || intent.empty?
+    raise InvalidIntent if intent.nil? || intent.empty?
 
     { intent: intent }
   end
 
   def is_ssml?(text)
-    return handle_error("Missing text") if text.nil?
-
     text =~ /^<speak\b[^>]*>(.*?)<\/speak>$/
   end
 
@@ -115,18 +121,16 @@ class GoogleAssistant
   end
 
   def inputs
-    params["inputs"] || handle_error("Missing inputs from request body")
+    raise MissingRequestInputs if params["inputs"].nil?
+    params["inputs"]
   end
 
   def intent_string
-    inputs[0]["intent"] || handle_error("Missing intent from request body")
+    raise MissingRequestIntent if inputs[0]["intent"].nil?
+    inputs[0]["intent"]
   end
 
   def conversation_params
     params["conversation"] || {}
-  end
-
-  def handle_error(message)
-    raise message
   end
 end

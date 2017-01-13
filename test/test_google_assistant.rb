@@ -164,6 +164,28 @@ describe GoogleAssistant do
         assert_equal(expected_response, subject.tell(message))
       end
     end
+
+    describe "when given an empty message" do
+
+      it "raises GoogleAssistant::InvalidMessage" do
+        message = ""
+
+        assert_raises GoogleAssistant::InvalidMessage do
+          subject.tell(message)
+        end
+      end
+    end
+
+    describe "when given a nil message" do
+
+      it "raises GoogleAssistant::InvalidMessage" do
+        message = nil
+
+        assert_raises GoogleAssistant::InvalidMessage do
+          subject.tell(message)
+        end
+      end
+    end
   end
 
   describe "#ask" do
@@ -171,7 +193,7 @@ describe GoogleAssistant do
     describe "when given a nil input prompt" do
 
       it "raises an error" do
-        assert_raises RuntimeError do
+        assert_raises GoogleAssistant::InvalidInputPrompt do
           subject.ask(prompt: nil, no_input_prompt: nil)
         end
       end
