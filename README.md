@@ -32,13 +32,13 @@ class GoogleAssistantController < ApplicationController
   def conversation
     assistant_response = GoogleAssistant.new(params, response).respond_to do |assistant|
       assistant.intent.main do
-        input_prompt = assistant.build_input_prompt(
-          true,
-          "<speak>Hi there! Say something, please.</speak>",
-          ["<speak>If you said something, I didn't hear you.</speak>", "<speak>Did you say something?</speak>"]
+        assistant.ask(
+          prompt: "<speak>Hi there! Say something, please.</speak>",
+          no_input_prompt: [
+            "<speak>If you said something, I didn't hear you.</speak>",
+            "<speak>Did you say something?</speak>"
+          ]
         )
-
-        assistant.ask(input_prompt)
       end
 
       assistant.intent.text do
@@ -83,20 +83,17 @@ end
 
 ### Ask
 
-Request user input by sending an `ask` response. To do so, build an input prompt and send it as an argument to `ask`.
+Request user input by sending an `ask` response. Send a prompt and a set of follow-up prompts for when the user fails to respond.
 
 ```rb
 assistant.intent.main do
-  input_prompt = assistant.build_input_prompt(
-    true,                                                         # true if your text is written with SSML, false otherwise.
-    "<speak>Hi there! Say something, please.</speak>",            # The voice prompt the user will hear.
-    [
+  assistant.ask(
+    prompt: "<speak>Hi there! Say something, please.</speak>",    # The voice prompt the user will hear.
+    no_input_prompt: [
       "<speak>If you said something, I didn't hear you.</speak>", # You can provide a number of "no input prompts". A random
       "<speak>Did you say something?</speak>"                     # one will be spoken if the user takes too long to respond.
     ]
   )
-
-  assistant.ask(input_prompt)
 end
 ```
 
@@ -106,7 +103,7 @@ Send a final response, ending the conversation.
 
 ```rb
 assistant.intent.text do
-  assistant.tell("<speak>Thanks for talking! Goodbye!</speak>")   # Both SSML and plain text work here.
+  assistant.tell("<speak>Thanks for talking! Goodbye!</speak>")   # Both SSML and plain text work here and anywhere you send a prompt.
 end
 ```
 
@@ -138,30 +135,24 @@ You can also send a state value with your responses to keep track of where your 
 ```rb
 GoogleAssistant.new(params, response).respond_to do |assistant|
   assistant.intent.main do
-    input_prompt = assistant.build_input_prompt(
-      false,
-      "What is your favorite color?",
-      ["What did you say your favorite color is?"]
-    )
-
     assistant.conversation.state = "asking favorite color"
 
-    assistant.ask(input_prompt)
+    assistant.ask(
+      prompt: "What is your favorite color?",
+      no_input_prompt: ["What did you say your favorite color is?"]
+    )
   end
 
   assistant.intent.text do
     if assistant.conversation.state == "asking favorite color"
       assistant.conversation.data["favorite_color"] = assistant.arguments[0].text_value
 
-      input_prompt = assistant.build_input_prompt(
-        false,
-        "What is your lucky number?",
-        ["What did you say your lucky number is?"]
-      )
-
       assistant.conversation.state = "asking lucky number"
 
-      assistant.ask(input_prompt)
+      assistant.ask(
+        prompt: "What is your lucky number?",
+        no_input_prompt: ["What did you say your lucky number is?"]
+      )
     elsif assistant.conversation.state == "asking lucky number"
       favorite_color = assistant.conversation.data["favorite_color"]
       lucky_number = assistant.arguments[0].text_value
