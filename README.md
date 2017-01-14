@@ -46,7 +46,7 @@ class GoogleAssistantController < ApplicationController
       end
     end
 
-    render assistant_response
+    render json: assistant_response
   end
 end
 ```
