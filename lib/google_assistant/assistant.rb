@@ -39,6 +39,10 @@ module GoogleAssistant
       @_conversation ||= Conversation.new(conversation_params)
     end
 
+    def user
+      @_user ||= User.new(user_params)
+    end
+
     def tell(message)
       raise InvalidMessage if message.nil? || message.empty?
 
@@ -129,6 +133,10 @@ module GoogleAssistant
 
     def conversation_params
       params["conversation"] || {}
+    end
+
+    def user_params
+      params["user"] || {}
     end
   end
 end

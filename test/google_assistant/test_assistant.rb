@@ -127,6 +127,16 @@ describe GoogleAssistant::Assistant do
     end
   end
 
+  describe "#user" do
+    let(:params) { load_json_fixture(:main_intent_request) }
+
+    it "returns a User object with the given params" do
+      user = subject.user
+
+      assert_equal("qwERtyUiopaSdfGhJklzXCVBNm/tF=", user.id)
+    end
+  end
+
   describe "#tell" do
 
     describe "when given an SSML message" do
