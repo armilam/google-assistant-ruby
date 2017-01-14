@@ -7,14 +7,6 @@ require "google_assistant/dialog_state"
 describe GoogleAssistant::Assistant do
   include TestHelper
 
-  class FakeResponse
-    attr_reader :headers
-
-    def initialize
-      @headers = {}
-    end
-  end
-
   let(:response) { FakeResponse.new }
   let(:params) { load_json_fixture(:main_intent_request) }
   subject { GoogleAssistant::Assistant.new(params, response) }
@@ -327,6 +319,78 @@ describe GoogleAssistant::Assistant do
                 ]
               },
               possible_intents: [{ intent: "assistant.intent.action.TEXT" }]
+            }
+          ]
+        }
+
+        assert_equal(expected_response, response)
+      end
+    end
+  end
+
+  describe "#ask_for_permission" do
+
+    describe "when given a nil context" do
+
+      it "raises InvalidPermissionContext" do
+        assert_raises GoogleAssistant::Assistant::InvalidPermissionContext do
+          subject.ask_for_permission(context: nil, permissions: GoogleAssistant::Permission::NAME)
+        end
+      end
+    end
+
+    describe "when given an empty context" do
+
+      it "raises InvalidPermissionContext" do
+        assert_raises GoogleAssistant::Assistant::InvalidPermissionContext do
+          subject.ask_for_permission(context: "", permissions: GoogleAssistant::Permission::NAME)
+        end
+      end
+    end
+
+    describe "when given an invalid permission" do
+
+      it "raises InvalidPermission" do
+        assert_raises GoogleAssistant::Assistant::InvalidPermission do
+          subject.ask_for_permission(context: "A context", permissions: "invalid permission")
+        end
+      end
+    end
+
+    describe "when given an empty array of permissions" do
+
+      it "raises InvalidPermission" do
+        assert_raises GoogleAssistant::Assistant::InvalidPermission do
+          subject.ask_for_permission(context: "A context", permissions: [])
+        end
+      end
+    end
+
+    describe "when given a single permission" do
+
+      it "returns a JSON hash response" do
+        response = subject.ask_for_permission(context: "A context", permissions: GoogleAssistant::Permission::NAME)
+
+        expected_response = {
+          conversation_token: "{\"state\":null,\"data\":{}}",
+          expect_user_response: true,
+          expected_inputs: [
+            {
+              input_prompt: {
+                initial_prompts: [{ text_to_speech: "placeholder for permission" }],
+                no_input_prompts: []
+              },
+              possible_intents: [
+                {
+                  intent: "assistant.intent.action.PERMISSION",
+                  input_value_spec: {
+                    permission_value_spec: {
+                      opt_context: "A context",
+                      permissions: ["NAME"]
+                    }
+                  }
+                }
+              ]
             }
           ]
         }

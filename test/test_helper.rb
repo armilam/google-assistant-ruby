@@ -1,4 +1,5 @@
 require "json"
+require "fake_response"
 
 module TestHelper
 
