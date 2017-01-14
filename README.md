@@ -107,6 +107,10 @@ assistant.intent.text do
 end
 ```
 
+### SSML
+
+SSML is Google Assistant's markup language for text to speech. It provides options to pause, interpret dates and numbers, and more. You can provide SSML responses or plain text. See [Google's documentation on SSML](https://developers.google.com/actions/reference/ssml).
+
 ### User input
 
 GoogleAssistant allows you to read the user's input using `assistant.arguments` so that you can respond appropriately.
@@ -163,9 +167,14 @@ GoogleAssistant.respond_to(params, response) do |assistant|
 end
 ```
 
-### SSML
+### User ID
 
-SSML is Google Assistant's markup language for text to speech. It provides options to pause, interpret dates and numbers, and more. You can provide SSML responses or plain text. See [Google's documentation on SSML](https://developers.google.com/actions/reference/ssml).
+You can get the user's ID. This will allow you to identify the user across conversations. It works much in the same way a cookie might work; it is possible for the user to reset that ID, so don't rely on it too much.
+
+```rb
+# Get the user's ID
+assistant.user.id
+```
 
 ### Testing your assistant
 
