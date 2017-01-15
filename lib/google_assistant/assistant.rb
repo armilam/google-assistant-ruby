@@ -33,7 +33,14 @@ module GoogleAssistant
 
     def arguments
       @_arguments ||= inputs[0]["arguments"].map do |argument|
-        Argument.new(argument)
+        Argument.from(argument)
+      end
+    end
+
+    def permission_granted?
+      arguments.any? do |argument|
+        argument.is_a?(PermissionArgument) &&
+          argument.permission_granted?
       end
     end
 
