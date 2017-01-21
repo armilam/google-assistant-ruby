@@ -115,7 +115,7 @@ describe GoogleAssistant::Assistant do
     end
 
     describe "when permission is not granted" do
-      let(:params) { load_json_fixture(:user_name_denied) }
+      let(:params) { load_json_fixture(:permission_denied) }
 
       it "returns false" do
         assert(!subject.permission_granted?)
@@ -150,6 +150,16 @@ describe GoogleAssistant::Assistant do
       user = subject.user
 
       assert_equal("qwERtyUiopaSdfGhJklzXCVBNm/tF=", user.id)
+    end
+  end
+
+  describe "#device" do
+    let(:params) { load_json_fixture(:coarse_location_granted) }
+
+    it "returns a Device object with the given params" do
+      device = subject.device
+
+      assert_equal(params["device"]["location"], device.location)
     end
   end
 

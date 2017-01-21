@@ -18,7 +18,5 @@ module GoogleAssistant
     def family_name
       profile["family_name"]
     end
-
-    # TODO: Other info (location)
   end
 end

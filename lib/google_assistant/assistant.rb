@@ -52,6 +52,10 @@ module GoogleAssistant
       @_user ||= User.new(user_params)
     end
 
+    def device
+      @_device ||= Device.new(device_params)
+    end
+
     def tell(message)
       raise InvalidMessage if message.nil? || message.empty?
 
@@ -172,6 +176,10 @@ module GoogleAssistant
 
     def user_params
       params["user"] || {}
+    end
+
+    def device_params
+      params["device"] || {}
     end
   end
 end

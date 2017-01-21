@@ -18,6 +18,7 @@ describe GoogleAssistant::User do
 
     it "sets the class's attributes" do
       assert_equal(params["user_id"], subject.id)
+      assert_equal(params["profile"], subject.profile)
     end
   end
 
