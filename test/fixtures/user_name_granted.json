@@ -1,0 +1,33 @@
+{
+    "conversation": {
+        "conversation_id": "1234567890",
+        "conversation_token": "{\"state\":null,\"data\":{}}",
+        "type": 2
+    },
+    "inputs": [
+        {
+            "intent": "assistant.intent.action.PERMISSION",
+            "raw_inputs": [
+                {
+                    "input_type": 2,
+                    "query": "sure"
+                }
+            ],
+            "arguments": [
+                {
+                    "name": "permission_granted",
+                    "raw_text": "sure",
+                    "text_value": "true"
+                }
+            ]
+        }
+    ],
+    "user": {
+        "user_id": "qwERtyUiopaSdfGhJklzXCVBNm/tF=",
+        "profile": {
+            "display_name": "John Smith",
+            "given_name": "John",
+            "family_name": "Smith"
+        }
+    }
+}

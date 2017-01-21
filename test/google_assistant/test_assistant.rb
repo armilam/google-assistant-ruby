@@ -7,14 +7,6 @@ require "google_assistant/dialog_state"
 describe GoogleAssistant::Assistant do
   include TestHelper
 
-  class FakeResponse
-    attr_reader :headers
-
-    def initialize
-      @headers = {}
-    end
-  end
-
   let(:response) { FakeResponse.new }
   let(:params) { load_json_fixture(:main_intent_request) }
   subject { GoogleAssistant::Assistant.new(params, response) }
@@ -115,6 +107,30 @@ describe GoogleAssistant::Assistant do
     end
   end
 
+  describe "#permission_granted?" do
+    let(:params) { load_json_fixture(:user_name_granted) }
+
+    it "returns true" do
+      assert(subject.permission_granted?)
+    end
+
+    describe "when permission is not granted" do
+      let(:params) { load_json_fixture(:permission_denied) }
+
+      it "returns false" do
+        assert(!subject.permission_granted?)
+      end
+    end
+
+    describe "when response is not a permission response" do
+      let(:params) { load_json_fixture(:text_intent_request) }
+
+      it "returns false" do
+        assert(!subject.permission_granted?)
+      end
+    end
+  end
+
   describe "#conversation" do
     let(:params) { load_json_fixture(:text_intent_request) }
 
@@ -134,6 +150,16 @@ describe GoogleAssistant::Assistant do
       user = subject.user
 
       assert_equal("qwERtyUiopaSdfGhJklzXCVBNm/tF=", user.id)
+    end
+  end
+
+  describe "#device" do
+    let(:params) { load_json_fixture(:coarse_location_granted) }
+
+    it "returns a Device object with the given params" do
+      device = subject.device
+
+      assert_equal(params["device"]["location"], device.location)
     end
   end
 
@@ -327,6 +353,78 @@ describe GoogleAssistant::Assistant do
                 ]
               },
               possible_intents: [{ intent: "assistant.intent.action.TEXT" }]
+            }
+          ]
+        }
+
+        assert_equal(expected_response, response)
+      end
+    end
+  end
+
+  describe "#ask_for_permission" do
+
+    describe "when given a nil context" do
+
+      it "raises InvalidPermissionContext" do
+        assert_raises GoogleAssistant::Assistant::InvalidPermissionContext do
+          subject.ask_for_permission(context: nil, permissions: GoogleAssistant::Permission::NAME)
+        end
+      end
+    end
+
+    describe "when given an empty context" do
+
+      it "raises InvalidPermissionContext" do
+        assert_raises GoogleAssistant::Assistant::InvalidPermissionContext do
+          subject.ask_for_permission(context: "", permissions: GoogleAssistant::Permission::NAME)
+        end
+      end
+    end
+
+    describe "when given an invalid permission" do
+
+      it "raises InvalidPermission" do
+        assert_raises GoogleAssistant::Assistant::InvalidPermission do
+          subject.ask_for_permission(context: "A context", permissions: "invalid permission")
+        end
+      end
+    end
+
+    describe "when given an empty array of permissions" do
+
+      it "raises InvalidPermission" do
+        assert_raises GoogleAssistant::Assistant::InvalidPermission do
+          subject.ask_for_permission(context: "A context", permissions: [])
+        end
+      end
+    end
+
+    describe "when given a single permission" do
+
+      it "returns a JSON hash response" do
+        response = subject.ask_for_permission(context: "A context", permissions: GoogleAssistant::Permission::NAME)
+
+        expected_response = {
+          conversation_token: "{\"state\":null,\"data\":{}}",
+          expect_user_response: true,
+          expected_inputs: [
+            {
+              input_prompt: {
+                initial_prompts: [{ text_to_speech: "placeholder for permission" }],
+                no_input_prompts: []
+              },
+              possible_intents: [
+                {
+                  intent: "assistant.intent.action.PERMISSION",
+                  input_value_spec: {
+                    permission_value_spec: {
+                      opt_context: "A context",
+                      permissions: ["NAME"]
+                    }
+                  }
+                }
+              ]
             }
           ]
         }

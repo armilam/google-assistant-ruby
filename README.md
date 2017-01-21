@@ -176,6 +176,80 @@ You can get the user's ID. This will allow you to identify the user across conve
 assistant.user.id
 ```
 
+### Permissions
+
+You can request information about the user and their device. Google handles collecting this information, but you can provide a prompt to let the user know why you need this information. The Google Assistant API responds with the `permission` intent after a permission request.
+
+#### Name
+
+Request the user's name. This will result in a prompt to the user like:
+> So that I can address you by name, I'll just need to get your name from Google. Is that ok?
+
+```rb
+assistant.intent.main do
+  # Request the user's name
+  assistant.ask_for_permission(context: "So that I can address you by name", permissions: GoogleAssistant::Permission::NAME)
+end
+
+assistant.intent.permission do
+  if assistant.permission_granted?
+    # Get the user's name from the response
+    given_name = assistant.user.given_name
+    family_name = assistant.user.family_name
+    display_name = assistant.user.display_name
+  else
+    # The user denied permission
+  end
+end
+```
+
+#### Coarse Location
+
+Request the device's zip code and city. This will result in a prompt to the user like:
+> To provide weather information for where you live, I'll just need to get your zip code from Google. Is that ok?
+
+```rb
+assistant.intent.main do
+  # Request the device's zip code and city
+  assistant.ask_for_permission(context: "To provide weather information for where you live", permissions: GoogleAssistant::Permission::DEVICE_COARSE_LOCATION)
+end
+
+assistant.intent.permission do
+  if assistant.permission_granted?
+    # Get the device's location from the response
+    zip_code = assistant.device.zip_code
+    city = assistant.device.city
+  else
+    # The user denied permission
+  end
+end
+```
+
+#### Precise Location
+
+Request the device's precise location. This will result in a prompt to the user like:
+> So that I can find out where you sleep at night, I'll just need to get your street address from Google. Is that ok?
+
+```rb
+assistant.intent.main do
+  # Request the device's precise location
+  assistant.ask_for_permission(context: "So that I can find out where you sleep at night", permissions: GoogleAssistant::Permission::DEVICE_PRECISE_LOCATION)
+end
+
+assistant.intent.permission do
+  if assistant.permission_granted?
+    # Get the device's location from the response
+    zip_code = assistant.device.zip_code
+    city = assistant.device.city
+    formatted_address = assistant.device.formatted_address
+    latitude = assistant.device.latitude
+    longitude = assistant.device.longitude
+  else
+    # The user denied permission
+  end
+end
+```
+
 ### Testing your assistant
 
 You can use any hosting platform.

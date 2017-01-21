@@ -7,14 +7,6 @@ require "google_assistant/dialog_state"
 describe GoogleAssistant do
   include TestHelper
 
-  class FakeResponse
-    attr_reader :headers
-
-    def initialize
-      @headers = {}
-    end
-  end
-
   describe "::respond_to" do
 
     it "creates a new Assistant and calls respond_to on it" do
