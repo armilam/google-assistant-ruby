@@ -107,6 +107,30 @@ describe GoogleAssistant::Assistant do
     end
   end
 
+  describe "#permission_granted?" do
+    let(:params) { load_json_fixture(:user_name_granted) }
+
+    it "returns true" do
+      assert(subject.permission_granted?)
+    end
+
+    describe "when permission is not granted" do
+      let(:params) { load_json_fixture(:user_name_denied) }
+
+      it "returns false" do
+        assert(!subject.permission_granted?)
+      end
+    end
+
+    describe "when response is not a permission response" do
+      let(:params) { load_json_fixture(:text_intent_request) }
+
+      it "returns false" do
+        assert(!subject.permission_granted?)
+      end
+    end
+  end
+
   describe "#conversation" do
     let(:params) { load_json_fixture(:text_intent_request) }
 
