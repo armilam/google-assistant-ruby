@@ -291,6 +291,24 @@ You can use any hosting platform.
 
 6. Use the [web simulator](https://developers.google.com/actions/tools/web-simulator) to simulate. Or better yet, if your Google Home device is logged into the same account you're using to build your action, you can say "OK Google, talk to my action" to test it out directly on your device.
 
+## Authentication
+
+You can require users to log in to your service before using your assistant. Read about it in [Google's documentation](https://developers.google.com/actions/develop/identity/oauth2-code-flow). The basic flow is this:
+
+1. User tries to talk to your assistant
+2. Google tells the user they need to sign in, which they can do via the Home app on their phone
+3. The Home app links the user to your Oauth endpoint
+4. User signs in to your app
+5. Google stores the user's Oauth access and refresh tokens
+6. For each subsequent request the user makes to your assistant, Google sends the user's access token so you can identify the user
+
+In order to set this up in your assistant, the basic instructions are as follows. Read Google's documentation for the full details.
+
+1. Implement Oauth in your application
+2. Set up an Oauth client in the [Google Developer Console](https://console.developers.google.com)
+3. In the application's `action.json` file, set up account linking according to [Google's Instructions](https://developers.google.com/actions/develop/identity/account-linking#enabling_account_linking)
+4. Use `assistant.user.access_token` to identify the user
+
 ## More information
 
 Check out Google's instructions at https://developers.google.com/actions/develop/sdk/getting-started for more detail on writing and testing a Google Assistant action.

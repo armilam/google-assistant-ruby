@@ -5,6 +5,7 @@ describe GoogleAssistant::User do
   let(:params) do
     {
       "user_id" => "some user id",
+      "access_token" => "iuaweLJ7igJgkyUGl7gujy52i8Iu609unjBJbk6",
       "profile" => {
         "display_name" => "Johnny",
         "given_name" => "John",
@@ -18,6 +19,7 @@ describe GoogleAssistant::User do
 
     it "sets the class's attributes" do
       assert_equal(params["user_id"], subject.id)
+      assert_equal(params["access_token"], subject.access_token)
       assert_equal(params["profile"], subject.profile)
     end
   end

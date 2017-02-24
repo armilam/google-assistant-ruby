@@ -1,10 +1,11 @@
 module GoogleAssistant
   class User
-    attr_reader :id, :profile
+    attr_reader :id, :profile, :access_token
 
     def initialize(opts)
       @id = opts["user_id"]
       @profile = opts["profile"] || {}
+      @access_token = opts["access_token"]
     end
 
     def display_name
