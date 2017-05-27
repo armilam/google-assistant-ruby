@@ -25,7 +25,7 @@ describe GoogleAssistant do
       assert(called_intent)
       assert(assistant.is_a?(GoogleAssistant::Assistant))
       assert_equal(params, assistant.params)
-      assert_equal("v1", response.headers["Google-Assistant-API-Version"])
+      assert_equal("v2", response.headers["Google-Assistant-API-Version"])
       assert_equal(response, assistant.response)
     end
   end

@@ -22,7 +22,7 @@ module GoogleAssistant
     def respond_to(&block)
       yield(self)
 
-      response.headers["Google-Assistant-API-Version"] = "v1"
+      response.headers["Google-Assistant-API-Version"] = "v2"
 
       intent.call
     end
