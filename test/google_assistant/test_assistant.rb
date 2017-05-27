@@ -433,4 +433,31 @@ describe GoogleAssistant::Assistant do
       end
     end
   end
+
+  describe "#request_sign_in" do
+
+    it "returns a JSON hash response" do
+      response = subject.request_sign_in
+
+      expected_response = {
+        conversation_token: "{\"state\":null,\"data\":{}}",
+        expect_user_response: true,
+        expected_inputs: [
+          {
+            input_prompt: {
+              initial_prompts: [{ text_to_speech: "placeholder for sign in" }],
+              no_input_prompts: []
+            },
+            possible_intents: [
+              {
+                intent: "assistant.intent.action.SIGN_IN"
+              }
+            ]
+          }
+        ]
+      }
+
+      assert_equal(expected_response, response)
+    end
+  end
 end

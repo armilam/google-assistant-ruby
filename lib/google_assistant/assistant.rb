@@ -93,6 +93,13 @@ module GoogleAssistant
       build_ask_response(prompt, expected_intent)
     end
 
+    def request_sign_in
+      prompt = build_input_prompt("placeholder for sign in")
+      expected_intent = build_expected_intent(StandardIntents::SIGN_IN)
+
+      build_ask_response(prompt, expected_intent)
+    end
+
     private
 
     def build_input_prompt(initial_prompt, no_inputs = [])

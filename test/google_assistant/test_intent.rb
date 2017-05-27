@@ -57,12 +57,28 @@ describe GoogleAssistant::Intent do
     end
   end
 
+  describe "#sign_in" do
+    let(:intent_string) { GoogleAssistant::StandardIntents::SIGN_IN }
+
+    it "sets the sign_in intent block" do
+      it_was_called = false
+      subject.sign_in do
+        it_was_called = true
+      end
+
+      subject.call
+
+      assert(it_was_called)
+    end
+  end
+
   describe "#call" do
 
     before :each do
       subject.main { "main" }
       subject.text { "text" }
       subject.permission { "permission" }
+      subject.sign_in { "sign_in" }
     end
 
     describe "when the main intent" do
@@ -89,6 +105,15 @@ describe GoogleAssistant::Intent do
       it "calls the permission intent block" do
         called_intent = subject.call
         assert_equal("permission", called_intent)
+      end
+    end
+
+    describe "when the sign_in intent" do
+      let(:intent_string) { GoogleAssistant::StandardIntents::SIGN_IN }
+
+      it "calls the sign_in intent block" do
+        called_intent = subject.call
+        assert_equal("sign_in", called_intent)
       end
     end
 

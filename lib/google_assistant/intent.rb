@@ -11,6 +11,9 @@ module GoogleAssistant
 
     # Assistant fires PERMISSION intent when action invokes askForPermission.
     PERMISSION = "assistant.intent.action.PERMISSION"
+
+    # Assistant fires SIGN_IN intent when requesting user to sign in
+    SIGN_IN = "assistant.intent.action.SIGN_IN"
   end
 
   class Intent
@@ -30,6 +33,10 @@ module GoogleAssistant
 
     def permission(&block)
       intents[StandardIntents::PERMISSION] = block
+    end
+
+    def sign_in(&block)
+      intents[StandardIntents::SIGN_IN] = block
     end
 
     def call
