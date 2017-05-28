@@ -57,27 +57,13 @@ module GoogleAssistant
     end
 
     def tell(message)
-      raise InvalidMessage if message.nil? || message.empty?
-
-      final_response = { speech_response: {} }
-
-      if is_ssml?(message)
-        final_response[:speech_response][:ssml] = message
-      else
-        final_response[:speech_response][:text_to_speech] = message
-      end
-
-      build_response(nil, false, nil, final_response)
+      response = Response::SpeechResponse.new(message)
+      response.to_json
     end
 
-    def ask(prompt:, no_input_prompt: [])
-      raise InvalidInputPrompt if prompt.nil? || prompt.empty?
-
-      no_input_prompt = [*no_input_prompt].compact
-      prompt = build_input_prompt(prompt, no_input_prompt)
-      expected_intent = build_expected_intent(StandardIntents::TEXT)
-
-      build_ask_response(prompt, expected_intent)
+    def ask(prompt, no_input_prompts = [])
+      response = Response::InputPrompt.new(prompt, [*no_input_prompts].compact, conversation)
+      response.to_json
     end
 
     def ask_for_permission(context:, permissions:)

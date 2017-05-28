@@ -226,7 +226,7 @@ describe GoogleAssistant::Assistant do
 
       it "raises an error" do
         assert_raises GoogleAssistant::Assistant::InvalidInputPrompt do
-          subject.ask(prompt: nil, no_input_prompt: nil)
+          subject.ask(nil, nil)
         end
       end
     end
@@ -234,7 +234,7 @@ describe GoogleAssistant::Assistant do
     describe "when given an SSML string input prompt" do
 
       it "returns a JSON hash response with SSML" do
-        response = subject.ask(prompt: "<speak>Some SSML input prompt</speak>")
+        response = subject.ask("<speak>Some SSML input prompt</speak>")
 
         expected_response = {
           conversation_token: "{\"state\":null,\"data\":{}}",
@@ -257,7 +257,7 @@ describe GoogleAssistant::Assistant do
     describe "when given a plain text string input prompt" do
 
       it "returns a JSON hash response with text" do
-        response = subject.ask(prompt: "Some text input prompt")
+        response = subject.ask("Some text input prompt")
 
         expected_response = {
           conversation_token: "{\"state\":null,\"data\":{}}",
@@ -283,7 +283,7 @@ describe GoogleAssistant::Assistant do
         dialog_state = subject.conversation.dialog_state
         dialog_state.state = "a state"
         dialog_state.data = { "a data key" => "the data value" }
-        response = subject.ask(prompt: "Some input prompt")
+        response = subject.ask("Some input prompt")
 
         expected_response = {
           conversation_token: { state: "a state", data: { "a data key" => "the data value" } }.to_json,
@@ -307,8 +307,8 @@ describe GoogleAssistant::Assistant do
 
       it "returns a JSON hash response with text" do
         response = subject.ask(
-          prompt: "Some text input prompt",
-          no_input_prompt: "A no input prompt"
+          "Some text input prompt",
+          "A no input prompt"
         )
 
         expected_response = {
@@ -333,8 +333,8 @@ describe GoogleAssistant::Assistant do
 
       it "returns a JSON hash response with text" do
         response = subject.ask(
-          prompt: "Some text input prompt",
-          no_input_prompt: [
+          "Some text input prompt",
+          [
             "A no input prompt",
             "<speak>Yet another no input prompt</speak>"
           ]
