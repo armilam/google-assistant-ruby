@@ -31,7 +31,7 @@ describe GoogleAssistant::Assistant do
 
     it "sets google assistant version header on the response" do
       subject.respond_to {}
-      assert_equal("v2", response.headers["Google-Assistant-API-Version"])
+      assert_equal("v1", response.headers["Google-Assistant-API-Version"])
     end
 
     describe "when on the MAIN intent" do

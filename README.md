@@ -2,7 +2,7 @@
 
 Write Google Assistant actions in Ruby.
 
-GoogleAssistant parses Google Assistant requests and provides the framework to respond appropriately. It works with the Google Assistant API v2.
+GoogleAssistant parses Google Assistant requests and provides the framework to respond appropriately. It works with the Google Assistant API v1.
 
 ## Installation
 
