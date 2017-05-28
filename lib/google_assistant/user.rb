@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module GoogleAssistant
   class User
     attr_reader :id, :profile, :access_token

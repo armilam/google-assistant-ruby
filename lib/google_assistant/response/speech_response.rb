@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "google_assistant/response/base"
 
 module GoogleAssistant
@@ -12,7 +14,7 @@ module GoogleAssistant
       end
 
       def to_json
-        raise GoogleAssistant::Assistant::InvalidMessage if message.nil? || message.empty?
+        raise GoogleAssistant::InvalidMessage if message.nil? || message.empty?
 
         response = super(false)
 

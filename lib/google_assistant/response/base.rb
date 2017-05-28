@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module GoogleAssistant
   module Response
     class Base
@@ -19,7 +21,7 @@ module GoogleAssistant
       protected
 
       def build_input_prompt(prompt, no_input_prompts)
-        raise GoogleAssistant::Assistant::InvalidInputPrompt if prompt.nil? || prompt.empty?
+        raise GoogleAssistant::InvalidInputPrompt if prompt.nil? || prompt.empty?
 
         initial_prompts = [
           { prompt_type(prompt) => prompt }
@@ -50,9 +52,9 @@ module GoogleAssistant
         expected_intent = { intent: intent }
 
         unless permissions.nil?
-          raise GoogleAssistant::Assistant::InvalidPermissionContext if context.nil? || context.empty?
-          raise GoogleAssistant::Assistant::InvalidPermission if permissions.empty?
-          raise GoogleAssistant::Assistant::InvalidPermission unless GoogleAssistant::Permission.valid?(permissions)
+          raise GoogleAssistant::InvalidPermissionContext if context.nil? || context.empty?
+          raise GoogleAssistant::InvalidPermission if permissions.empty?
+          raise GoogleAssistant::InvalidPermission unless GoogleAssistant::Permission.valid?(permissions)
 
           expected_intent[:input_value_spec] = {
             permission_value_spec: {

@@ -4,13 +4,6 @@ require "json"
 
 module GoogleAssistant
   class Assistant
-    InvalidIntent = Class.new(StandardError)
-    InvalidMessage = Class.new(StandardError)
-    InvalidInputPrompt = Class.new(StandardError)
-    InvalidPermission = Class.new(StandardError)
-    InvalidPermissionContext = Class.new(StandardError)
-    MissingRequestInputs = Class.new(StandardError)
-    MissingRequestIntent = Class.new(StandardError)
 
     attr_reader :params, :response
 

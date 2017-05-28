@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "google_assistant/response/base"
 
 module GoogleAssistant

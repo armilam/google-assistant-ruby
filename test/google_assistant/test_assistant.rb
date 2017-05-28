@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "minitest/autorun"
 require "test_helper"
 require "google_assistant/assistant"
@@ -199,10 +201,10 @@ describe GoogleAssistant::Assistant do
 
     describe "when given an empty message" do
 
-      it "raises GoogleAssistant::Assistant::InvalidMessage" do
+      it "raises GoogleAssistant::InvalidMessage" do
         message = ""
 
-        assert_raises GoogleAssistant::Assistant::InvalidMessage do
+        assert_raises GoogleAssistant::InvalidMessage do
           subject.tell(message)
         end
       end
@@ -210,10 +212,10 @@ describe GoogleAssistant::Assistant do
 
     describe "when given a nil message" do
 
-      it "raises GoogleAssistant::Assistant::InvalidMessage" do
+      it "raises GoogleAssistant::InvalidMessage" do
         message = nil
 
-        assert_raises GoogleAssistant::Assistant::InvalidMessage do
+        assert_raises GoogleAssistant::InvalidMessage do
           subject.tell(message)
         end
       end
@@ -225,7 +227,7 @@ describe GoogleAssistant::Assistant do
     describe "when given a nil input prompt" do
 
       it "raises an error" do
-        assert_raises GoogleAssistant::Assistant::InvalidInputPrompt do
+        assert_raises GoogleAssistant::InvalidInputPrompt do
           subject.ask(nil, nil)
         end
       end
@@ -367,7 +369,7 @@ describe GoogleAssistant::Assistant do
     describe "when given a nil context" do
 
       it "raises InvalidPermissionContext" do
-        assert_raises GoogleAssistant::Assistant::InvalidPermissionContext do
+        assert_raises GoogleAssistant::InvalidPermissionContext do
           subject.ask_for_permission(nil, GoogleAssistant::Permission::NAME)
         end
       end
@@ -376,7 +378,7 @@ describe GoogleAssistant::Assistant do
     describe "when given an empty context" do
 
       it "raises InvalidPermissionContext" do
-        assert_raises GoogleAssistant::Assistant::InvalidPermissionContext do
+        assert_raises GoogleAssistant::InvalidPermissionContext do
           subject.ask_for_permission("", GoogleAssistant::Permission::NAME)
         end
       end
@@ -385,7 +387,7 @@ describe GoogleAssistant::Assistant do
     describe "when given an invalid permission" do
 
       it "raises InvalidPermission" do
-        assert_raises GoogleAssistant::Assistant::InvalidPermission do
+        assert_raises GoogleAssistant::InvalidPermission do
           subject.ask_for_permission("A context", "invalid permission")
         end
       end
@@ -394,7 +396,7 @@ describe GoogleAssistant::Assistant do
     describe "when given an empty array of permissions" do
 
       it "raises InvalidPermission" do
-        assert_raises GoogleAssistant::Assistant::InvalidPermission do
+        assert_raises GoogleAssistant::InvalidPermission do
           subject.ask_for_permission("A context", [])
         end
       end
