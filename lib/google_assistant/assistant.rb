@@ -4,13 +4,6 @@ require "json"
 
 module GoogleAssistant
   class Assistant
-    InvalidIntent = Class.new(StandardError)
-    InvalidMessage = Class.new(StandardError)
-    InvalidInputPrompt = Class.new(StandardError)
-    InvalidPermission = Class.new(StandardError)
-    InvalidPermissionContext = Class.new(StandardError)
-    MissingRequestInputs = Class.new(StandardError)
-    MissingRequestIntent = Class.new(StandardError)
 
     attr_reader :params, :response
 
@@ -57,108 +50,21 @@ module GoogleAssistant
     end
 
     def tell(message)
-      raise InvalidMessage if message.nil? || message.empty?
-
-      final_response = { speech_response: {} }
-
-      if is_ssml?(message)
-        final_response[:speech_response][:ssml] = message
-      else
-        final_response[:speech_response][:text_to_speech] = message
-      end
-
-      build_response(nil, false, nil, final_response)
+      response = Response::SpeechResponse.new(message)
+      response.to_json
     end
 
-    def ask(prompt:, no_input_prompt: [])
-      raise InvalidInputPrompt if prompt.nil? || prompt.empty?
-
-      no_input_prompt = [*no_input_prompt].compact
-      prompt = build_input_prompt(prompt, no_input_prompt)
-      expected_intent = build_expected_intent(StandardIntents::TEXT)
-
-      build_ask_response(prompt, expected_intent)
+    def ask(prompt, no_input_prompts = [])
+      response = Response::InputPrompt.new(prompt, no_input_prompts, conversation)
+      response.to_json
     end
 
-    def ask_for_permission(context:, permissions:)
-      raise InvalidPermissionContext if context.nil? || context.empty?
-
-      permissions = [*permissions].compact
-      raise InvalidPermission unless Permission.valid?(permissions)
-      raise InvalidPermission if permissions.size == 0
-
-      prompt = build_input_prompt("placeholder for permission")
-      expected_intent = build_expected_intent(StandardIntents::PERMISSION, permissions, context)
-
-      build_ask_response(prompt, expected_intent)
+    def ask_for_permission(context, permissions)
+      response = Response::AskForPermission.new(context, permissions, conversation)
+      response.to_json
     end
 
     private
-
-    def build_input_prompt(initial_prompt, no_inputs = [])
-      initial_prompts = [
-        { prompt_type(initial_prompt) => initial_prompt }
-      ]
-
-      no_input_prompts = no_inputs.map do |prompt|
-        { prompt_type(prompt) => prompt }
-      end
-
-      {
-        initial_prompts: initial_prompts,
-        no_input_prompts: no_input_prompts
-      }
-    end
-
-    def build_ask_response(prompt, expected_intent)
-      expected_inputs = [{
-        input_prompt: prompt,
-        possible_intents: [expected_intent]
-      }]
-
-      build_response(
-        conversation.dialog_state,
-        true,
-        expected_inputs,
-        nil
-      )
-    end
-
-    def build_response(dialog_state, expect_user_response, expected_input, final_response)
-      response = {}
-
-      response[:conversation_token] = dialog_state.to_json if dialog_state
-      response[:expect_user_response] = expect_user_response
-      response[:expected_inputs] = expected_input if expected_input
-      response[:final_response] = final_response if !expect_user_response && final_response
-
-      response
-    end
-
-    def build_expected_intent(intent, permissions = nil, context = nil)
-      raise InvalidIntent if intent.nil? || intent.empty?
-
-      expected_intent = { intent: intent }
-
-      unless context.nil? || permissions.nil?
-        expected_intent[:input_value_spec] = {
-          permission_value_spec: {
-            opt_context: context,
-            permissions: permissions
-          }
-        }
-      end
-
-      expected_intent
-    end
-
-    def is_ssml?(text)
-      text =~ /^<speak\b[^>]*>(.*?)<\/speak>$/
-    end
-
-    def prompt_type(text)
-      is_ssml?(text) ? :ssml : :text_to_speech
-    end
 
     def inputs
       raise MissingRequestInputs if params["inputs"].nil?

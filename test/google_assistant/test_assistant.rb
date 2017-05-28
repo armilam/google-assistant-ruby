@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "minitest/autorun"
 require "test_helper"
 require "google_assistant/assistant"
@@ -199,10 +201,10 @@ describe GoogleAssistant::Assistant do
 
     describe "when given an empty message" do
 
-      it "raises GoogleAssistant::Assistant::InvalidMessage" do
+      it "raises GoogleAssistant::InvalidMessage" do
         message = ""
 
-        assert_raises GoogleAssistant::Assistant::InvalidMessage do
+        assert_raises GoogleAssistant::InvalidMessage do
           subject.tell(message)
         end
       end
@@ -210,10 +212,10 @@ describe GoogleAssistant::Assistant do
 
     describe "when given a nil message" do
 
-      it "raises GoogleAssistant::Assistant::InvalidMessage" do
+      it "raises GoogleAssistant::InvalidMessage" do
         message = nil
 
-        assert_raises GoogleAssistant::Assistant::InvalidMessage do
+        assert_raises GoogleAssistant::InvalidMessage do
           subject.tell(message)
         end
       end
@@ -225,8 +227,8 @@ describe GoogleAssistant::Assistant do
     describe "when given a nil input prompt" do
 
       it "raises an error" do
-        assert_raises GoogleAssistant::Assistant::InvalidInputPrompt do
-          subject.ask(prompt: nil, no_input_prompt: nil)
+        assert_raises GoogleAssistant::InvalidInputPrompt do
+          subject.ask(nil, nil)
         end
       end
     end
@@ -234,7 +236,7 @@ describe GoogleAssistant::Assistant do
     describe "when given an SSML string input prompt" do
 
       it "returns a JSON hash response with SSML" do
-        response = subject.ask(prompt: "<speak>Some SSML input prompt</speak>")
+        response = subject.ask("<speak>Some SSML input prompt</speak>")
 
         expected_response = {
           conversation_token: "{\"state\":null,\"data\":{}}",
@@ -257,7 +259,7 @@ describe GoogleAssistant::Assistant do
     describe "when given a plain text string input prompt" do
 
       it "returns a JSON hash response with text" do
-        response = subject.ask(prompt: "Some text input prompt")
+        response = subject.ask("Some text input prompt")
 
         expected_response = {
           conversation_token: "{\"state\":null,\"data\":{}}",
@@ -283,7 +285,7 @@ describe GoogleAssistant::Assistant do
         dialog_state = subject.conversation.dialog_state
         dialog_state.state = "a state"
         dialog_state.data = { "a data key" => "the data value" }
-        response = subject.ask(prompt: "Some input prompt")
+        response = subject.ask("Some input prompt")
 
         expected_response = {
           conversation_token: { state: "a state", data: { "a data key" => "the data value" } }.to_json,
@@ -307,8 +309,8 @@ describe GoogleAssistant::Assistant do
 
       it "returns a JSON hash response with text" do
         response = subject.ask(
-          prompt: "Some text input prompt",
-          no_input_prompt: "A no input prompt"
+          "Some text input prompt",
+          "A no input prompt"
         )
 
         expected_response = {
@@ -333,8 +335,8 @@ describe GoogleAssistant::Assistant do
 
       it "returns a JSON hash response with text" do
         response = subject.ask(
-          prompt: "Some text input prompt",
-          no_input_prompt: [
+          "Some text input prompt",
+          [
             "A no input prompt",
             "<speak>Yet another no input prompt</speak>"
           ]
@@ -367,8 +369,8 @@ describe GoogleAssistant::Assistant do
     describe "when given a nil context" do
 
       it "raises InvalidPermissionContext" do
-        assert_raises GoogleAssistant::Assistant::InvalidPermissionContext do
-          subject.ask_for_permission(context: nil, permissions: GoogleAssistant::Permission::NAME)
+        assert_raises GoogleAssistant::InvalidPermissionContext do
+          subject.ask_for_permission(nil, GoogleAssistant::Permission::NAME)
         end
       end
     end
@@ -376,8 +378,8 @@ describe GoogleAssistant::Assistant do
     describe "when given an empty context" do
 
       it "raises InvalidPermissionContext" do
-        assert_raises GoogleAssistant::Assistant::InvalidPermissionContext do
-          subject.ask_for_permission(context: "", permissions: GoogleAssistant::Permission::NAME)
+        assert_raises GoogleAssistant::InvalidPermissionContext do
+          subject.ask_for_permission("", GoogleAssistant::Permission::NAME)
         end
       end
     end
@@ -385,8 +387,8 @@ describe GoogleAssistant::Assistant do
     describe "when given an invalid permission" do
 
       it "raises InvalidPermission" do
-        assert_raises GoogleAssistant::Assistant::InvalidPermission do
-          subject.ask_for_permission(context: "A context", permissions: "invalid permission")
+        assert_raises GoogleAssistant::InvalidPermission do
+          subject.ask_for_permission("A context", "invalid permission")
         end
       end
     end
@@ -394,8 +396,8 @@ describe GoogleAssistant::Assistant do
     describe "when given an empty array of permissions" do
 
       it "raises InvalidPermission" do
-        assert_raises GoogleAssistant::Assistant::InvalidPermission do
-          subject.ask_for_permission(context: "A context", permissions: [])
+        assert_raises GoogleAssistant::InvalidPermission do
+          subject.ask_for_permission("A context", [])
         end
       end
     end
@@ -403,7 +405,7 @@ describe GoogleAssistant::Assistant do
     describe "when given a single permission" do
 
       it "returns a JSON hash response" do
-        response = subject.ask_for_permission(context: "A context", permissions: GoogleAssistant::Permission::NAME)
+        response = subject.ask_for_permission("A context", GoogleAssistant::Permission::NAME)
 
         expected_response = {
           conversation_token: "{\"state\":null,\"data\":{}}",
@@ -411,7 +413,7 @@ describe GoogleAssistant::Assistant do
           expected_inputs: [
             {
               input_prompt: {
-                initial_prompts: [{ text_to_speech: "placeholder for permission" }],
+                initial_prompts: [{ text_to_speech: "placeholder" }],
                 no_input_prompts: []
               },
               possible_intents: [
