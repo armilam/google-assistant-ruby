@@ -1,3 +1,5 @@
+require "google_assistant/response/base"
+
 module GoogleAssistant
   module Response
     class InputPrompt < Base
@@ -6,7 +8,7 @@ module GoogleAssistant
 
       def initialize(prompt, no_input_prompts, conversation)
         @prompt = prompt
-        @no_input_prompts = no_input_prompts
+        @no_input_prompts = [*no_input_prompts].compact
         super(conversation)
       end
 

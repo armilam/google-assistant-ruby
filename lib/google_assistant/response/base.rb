@@ -49,7 +49,11 @@ module GoogleAssistant
 
         expected_intent = { intent: intent }
 
-        unless context.nil? || permissions.nil?
+        unless permissions.nil?
+          raise GoogleAssistant::Assistant::InvalidPermissionContext if context.nil? || context.empty?
+          raise GoogleAssistant::Assistant::InvalidPermission if permissions.empty?
+          raise GoogleAssistant::Assistant::InvalidPermission unless GoogleAssistant::Permission.valid?(permissions)
+
           expected_intent[:input_value_spec] = {
             permission_value_spec: {
               opt_context: context,

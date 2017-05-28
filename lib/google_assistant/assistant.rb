@@ -62,21 +62,13 @@ module GoogleAssistant
     end
 
     def ask(prompt, no_input_prompts = [])
-      response = Response::InputPrompt.new(prompt, [*no_input_prompts].compact, conversation)
+      response = Response::InputPrompt.new(prompt, no_input_prompts, conversation)
       response.to_json
     end
 
-    def ask_for_permission(context:, permissions:)
-      raise InvalidPermissionContext if context.nil? || context.empty?
-
-      permissions = [*permissions].compact
-      raise InvalidPermission unless Permission.valid?(permissions)
-      raise InvalidPermission if permissions.size == 0
-
-      prompt = build_input_prompt("placeholder for permission")
-      expected_intent = build_expected_intent(StandardIntents::PERMISSION, permissions, context)
-
-      build_ask_response(prompt, expected_intent)
+    def ask_for_permission(context, permissions)
+      response = Response::AskForPermission.new(context, permissions, conversation)
+      response.to_json
     end
 
     private

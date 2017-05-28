@@ -368,7 +368,7 @@ describe GoogleAssistant::Assistant do
 
       it "raises InvalidPermissionContext" do
         assert_raises GoogleAssistant::Assistant::InvalidPermissionContext do
-          subject.ask_for_permission(context: nil, permissions: GoogleAssistant::Permission::NAME)
+          subject.ask_for_permission(nil, GoogleAssistant::Permission::NAME)
         end
       end
     end
@@ -377,7 +377,7 @@ describe GoogleAssistant::Assistant do
 
       it "raises InvalidPermissionContext" do
         assert_raises GoogleAssistant::Assistant::InvalidPermissionContext do
-          subject.ask_for_permission(context: "", permissions: GoogleAssistant::Permission::NAME)
+          subject.ask_for_permission("", GoogleAssistant::Permission::NAME)
         end
       end
     end
@@ -386,7 +386,7 @@ describe GoogleAssistant::Assistant do
 
       it "raises InvalidPermission" do
         assert_raises GoogleAssistant::Assistant::InvalidPermission do
-          subject.ask_for_permission(context: "A context", permissions: "invalid permission")
+          subject.ask_for_permission("A context", "invalid permission")
         end
       end
     end
@@ -395,7 +395,7 @@ describe GoogleAssistant::Assistant do
 
       it "raises InvalidPermission" do
         assert_raises GoogleAssistant::Assistant::InvalidPermission do
-          subject.ask_for_permission(context: "A context", permissions: [])
+          subject.ask_for_permission("A context", [])
         end
       end
     end
@@ -403,7 +403,7 @@ describe GoogleAssistant::Assistant do
     describe "when given a single permission" do
 
       it "returns a JSON hash response" do
-        response = subject.ask_for_permission(context: "A context", permissions: GoogleAssistant::Permission::NAME)
+        response = subject.ask_for_permission("A context", GoogleAssistant::Permission::NAME)
 
         expected_response = {
           conversation_token: "{\"state\":null,\"data\":{}}",
@@ -411,7 +411,7 @@ describe GoogleAssistant::Assistant do
           expected_inputs: [
             {
               input_prompt: {
-                initial_prompts: [{ text_to_speech: "placeholder for permission" }],
+                initial_prompts: [{ text_to_speech: "placeholder" }],
                 no_input_prompts: []
               },
               possible_intents: [

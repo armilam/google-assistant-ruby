@@ -1,3 +1,5 @@
+require "google_assistant/response/base"
+
 module GoogleAssistant
   module Response
     class SpeechResponse < Base
