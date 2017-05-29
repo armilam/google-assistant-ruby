@@ -1,8 +1,12 @@
+# Currently upgrading
+
+I am currently upgrading this gem to work with Google Assistant API v2. Until that is complete, the master branch will not be fully functional. See [v1.0.0](https://github.com/armilam/google-assistant-ruby/tree/v1.0.0) of this gem for the version that works with Google Assistant API v1.
+
 # Google Assistant Ruby
 
 Write Google Assistant actions in Ruby.
 
-GoogleAssistant parses Google Assistant requests and provides the framework to respond appropriately. It works with the Google Assistant API v1.
+GoogleAssistant parses Google Assistant requests and provides the framework to respond appropriately. It works with the Google Assistant API v2.
 
 ## Installation
 
