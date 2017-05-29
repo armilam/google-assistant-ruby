@@ -12,8 +12,8 @@ module GoogleAssistant
 
       def to_json(expect_user_response)
         response = {}
-        response[:conversation_token] = conversation.dialog_state.to_json if conversation&.dialog_state
-        response[:expect_user_response] = expect_user_response
+        response[:conversationToken] = conversation.dialog_state.to_json if conversation&.dialog_state
+        response[:expectUserResponse] = expect_user_response
 
         response
       end
@@ -32,8 +32,8 @@ module GoogleAssistant
         end
 
         {
-          initial_prompts: initial_prompts,
-          no_input_prompts: no_input_prompts
+          initialPrompts: initial_prompts,
+          noInputPrompts: no_input_prompts
         }
       end
 
@@ -41,8 +41,8 @@ module GoogleAssistant
         prompt = build_input_prompt(prompt, no_input_prompts)
 
         expected_inputs = [{
-          input_prompt: prompt,
-          possible_intents: [expected_intent]
+          inputPrompt: prompt,
+          possibleIntents: [expected_intent]
         }]
       end
 
@@ -56,9 +56,9 @@ module GoogleAssistant
           raise GoogleAssistant::InvalidPermission if permissions.empty?
           raise GoogleAssistant::InvalidPermission unless GoogleAssistant::Permission.valid?(permissions)
 
-          expected_intent[:input_value_spec] = {
-            permission_value_spec: {
-              opt_context: context,
+          expected_intent[:inputValueSpec] = {
+            permissionValueSpec: {
+              optContext: context,
               permissions: permissions
             }
           }
@@ -70,7 +70,7 @@ module GoogleAssistant
       private
 
       def prompt_type(text)
-        is_ssml?(text) ? :ssml : :text_to_speech
+        is_ssml?(text) ? :ssml : :textToSpeech
       end
 
       def is_ssml?(text)

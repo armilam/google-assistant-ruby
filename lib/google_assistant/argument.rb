@@ -6,7 +6,7 @@ module GoogleAssistant
 
     def self.from(opts)
       case opts["name"]
-      when "permission_granted"
+      when "permissionGranted"
         PermissionArgument.new(opts)
       when "text"
         TextArgument.new(opts)
@@ -17,8 +17,8 @@ module GoogleAssistant
 
     def initialize(opts)
       @name = opts["name"]
-      @raw_text = opts["raw_text"]
-      @text_value = opts["text_value"]
+      @raw_text = opts["rawText"]
+      @text_value = opts["textValue"]
     end
   end
 

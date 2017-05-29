@@ -21,9 +21,9 @@ module GoogleAssistant
         speech_response = if is_ssml?(message)
           { ssml: message }
         else
-          { text_to_speech: message }
+          { textToSpeech: message }
         end
-        response[:final_response] = { speech_response: speech_response }
+        response[:finalResponse] = { speechResponse: speech_response }
 
         response
       end

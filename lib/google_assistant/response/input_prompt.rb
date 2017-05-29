@@ -19,7 +19,7 @@ module GoogleAssistant
 
         expected_intent = build_expected_intent(StandardIntents::TEXT)
         expected_inputs = build_expected_inputs(prompt: prompt, no_input_prompts: no_input_prompts, expected_intent: expected_intent)
-        response[:expected_inputs] = expected_inputs
+        response[:expectedInputs] = expected_inputs
 
         response
       end
