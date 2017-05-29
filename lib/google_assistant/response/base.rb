@@ -56,7 +56,8 @@ module GoogleAssistant
           raise GoogleAssistant::InvalidPermission if permissions.empty?
           raise GoogleAssistant::InvalidPermission unless GoogleAssistant::Permission.valid?(permissions)
 
-          expected_intent[:inputValueSpec] = {
+          expected_intent[:inputValueData] = {
+            "@type": "type.googleapis.com/google.actions.v2.PermissionValueSpec",
             permissionValueSpec: {
               optContext: context,
               permissions: permissions
