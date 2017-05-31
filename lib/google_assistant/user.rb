@@ -8,6 +8,7 @@ module GoogleAssistant
       @id = opts["userId"]
       @profile = opts["profile"] || {}
       @access_token = opts["accessToken"]
+      @locale = opts["locale"]
     end
 
     def display_name
