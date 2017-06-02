@@ -58,10 +58,8 @@ module GoogleAssistant
 
           expected_intent[:inputValueData] = {
             "@type": "type.googleapis.com/google.actions.v2.PermissionValueSpec",
-            permissionValueSpec: {
-              optContext: context,
-              permissions: permissions
-            }
+            optContext: context,
+            permissions: permissions
           }
         end
 
