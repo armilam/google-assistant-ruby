@@ -6,9 +6,9 @@ module GoogleAssistant
 
     def self.from(opts)
       case opts["name"]
-      when "permissionGranted"
+      when "PERMISSION"
         PermissionArgument.new(opts)
-      when "text"
+      when "TEXT"
         TextArgument.new(opts)
       else
         Argument.new(opts)
