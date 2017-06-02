@@ -4,12 +4,12 @@ require "google_assistant/user"
 describe GoogleAssistant::User do
   let(:params) do
     {
-      "user_id" => "some user id",
-      "access_token" => "iuaweLJ7igJgkyUGl7gujy52i8Iu609unjBJbk6",
+      "userId" => "some user id",
+      "accessToken" => "iuaweLJ7igJgkyUGl7gujy52i8Iu609unjBJbk6",
       "profile" => {
-        "display_name" => "Johnny",
-        "given_name" => "John",
-        "family_name" => "Smith"
+        "displayName" => "Johnny",
+        "givenName" => "John",
+        "familyName" => "Smith"
       }
     }
   end
@@ -18,8 +18,8 @@ describe GoogleAssistant::User do
   describe "#initialize" do
 
     it "sets the class's attributes" do
-      assert_equal(params["user_id"], subject.id)
-      assert_equal(params["access_token"], subject.access_token)
+      assert_equal(params["userId"], subject.id)
+      assert_equal(params["accessToken"], subject.access_token)
       assert_equal(params["profile"], subject.profile)
     end
   end
@@ -27,21 +27,21 @@ describe GoogleAssistant::User do
   describe "#display_name" do
 
     it "returns the display_name from the hash" do
-      assert_equal(params["profile"]["display_name"], subject.display_name)
+      assert_equal(params["profile"]["displayName"], subject.display_name)
     end
   end
 
   describe "#given_name" do
 
     it "returns the given_name from the hash" do
-      assert_equal(params["profile"]["given_name"], subject.given_name)
+      assert_equal(params["profile"]["givenName"], subject.given_name)
     end
   end
 
   describe "#family_name" do
 
     it "returns the family_name from the hash" do
-      assert_equal(params["profile"]["family_name"], subject.family_name)
+      assert_equal(params["profile"]["familyName"], subject.family_name)
     end
   end
 end

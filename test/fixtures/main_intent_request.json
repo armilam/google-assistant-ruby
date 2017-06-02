@@ -1,21 +1,21 @@
 {
     "conversation": {
-        "conversation_id": "1234567890",
-        "type": 1
+        "conversationId": "1234567890",
+        "type": "NEW"
     },
     "inputs": [
         {
-            "arguments": [],
-            "intent": "assistant.intent.action.MAIN",
-            "raw_inputs": [
+            "intent": "actions.intent.MAIN",
+            "rawInputs": [
                 {
-                    "input_type": 2,
+                    "inputType": "KEYBOARD",
                     "query": "Google Assistant Ruby Test"
                 }
             ]
         }
     ],
     "user": {
-        "user_id": "qwERtyUiopaSdfGhJklzXCVBNm/tF="
+        "locale": "en-US",
+        "userId": "qwERtyUiopaSdfGhJklzXCVBNm/tF="
     }
 }

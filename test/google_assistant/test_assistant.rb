@@ -31,7 +31,7 @@ describe GoogleAssistant::Assistant do
 
     it "sets google assistant version header on the response" do
       subject.respond_to {}
-      assert_equal("v1", response.headers["Google-Assistant-API-Version"])
+      assert_equal("v2", response.headers["Google-Assistant-API-Version"])
     end
 
     describe "when on the MAIN intent" do
@@ -102,7 +102,7 @@ describe GoogleAssistant::Assistant do
 
         argument = subject.arguments.first
 
-        assert_equal("text", argument.name)
+        assert_equal("TEXT", argument.name)
         assert_equal("this is some raw text", argument.raw_text)
         assert_equal("this is a text value", argument.text_value)
       end
@@ -140,7 +140,7 @@ describe GoogleAssistant::Assistant do
       conversation = subject.conversation
 
       assert_equal("1234567890", conversation.id)
-      assert_equal(2, conversation.type)
+      assert_equal("ACTIVE", conversation.type)
       assert_equal(GoogleAssistant::DialogState, conversation.dialog_state.class)
     end
   end
@@ -173,9 +173,9 @@ describe GoogleAssistant::Assistant do
         message = "<speak>An SSML message</speak>"
 
         expected_response = {
-          expect_user_response: false,
-          final_response: {
-            speech_response: { ssml: message }
+          expectUserResponse: false,
+          finalResponse: {
+            speechResponse: { ssml: message }
           }
         }
 
@@ -189,9 +189,9 @@ describe GoogleAssistant::Assistant do
         message = "A plain text message"
 
         expected_response = {
-          expect_user_response: false,
-          final_response: {
-            speech_response: { text_to_speech: message }
+          expectUserResponse: false,
+          finalResponse: {
+            speechResponse: { textToSpeech: message }
           }
         }
 
@@ -239,15 +239,15 @@ describe GoogleAssistant::Assistant do
         response = subject.ask("<speak>Some SSML input prompt</speak>")
 
         expected_response = {
-          conversation_token: "{\"state\":null,\"data\":{}}",
-          expect_user_response: true,
-          expected_inputs: [
+          conversationToken: "{\"state\":null,\"data\":{}}",
+          expectUserResponse: true,
+          expectedInputs: [
             {
-              input_prompt: {
-                initial_prompts: [{ ssml: "<speak>Some SSML input prompt</speak>" }],
-                no_input_prompts: []
+              inputPrompt: {
+                initialPrompts: [{ ssml: "<speak>Some SSML input prompt</speak>" }],
+                noInputPrompts: []
               },
-              possible_intents: [{ intent: "assistant.intent.action.TEXT" }]
+              possibleIntents: [{ intent: "actions.intent.TEXT" }]
             }
           ]
         }
@@ -262,15 +262,15 @@ describe GoogleAssistant::Assistant do
         response = subject.ask("Some text input prompt")
 
         expected_response = {
-          conversation_token: "{\"state\":null,\"data\":{}}",
-          expect_user_response: true,
-          expected_inputs: [
+          conversationToken: "{\"state\":null,\"data\":{}}",
+          expectUserResponse: true,
+          expectedInputs: [
             {
-              input_prompt: {
-                initial_prompts: [{ text_to_speech: "Some text input prompt" }],
-                no_input_prompts: []
+              inputPrompt: {
+                initialPrompts: [{ textToSpeech: "Some text input prompt" }],
+                noInputPrompts: []
               },
-              possible_intents: [{ intent: "assistant.intent.action.TEXT" }]
+              possibleIntents: [{ intent: "actions.intent.TEXT" }]
             }
           ]
         }
@@ -288,15 +288,15 @@ describe GoogleAssistant::Assistant do
         response = subject.ask("Some input prompt")
 
         expected_response = {
-          conversation_token: { state: "a state", data: { "a data key" => "the data value" } }.to_json,
-          expect_user_response: true,
-          expected_inputs: [
+          conversationToken: { state: "a state", data: { "a data key" => "the data value" } }.to_json,
+          expectUserResponse: true,
+          expectedInputs: [
             {
-              input_prompt:  {
-                initial_prompts: [{ text_to_speech: "Some input prompt" }],
-                no_input_prompts: []
+              inputPrompt:  {
+                initialPrompts: [{ textToSpeech: "Some input prompt" }],
+                noInputPrompts: []
               },
-              possible_intents: [{ intent: "assistant.intent.action.TEXT" }]
+              possibleIntents: [{ intent: "actions.intent.TEXT" }]
             }
           ]
         }
@@ -305,7 +305,7 @@ describe GoogleAssistant::Assistant do
       end
     end
 
-    describe "when given a string no_input_prompt" do
+    describe "when given a string no_inputPrompt" do
 
       it "returns a JSON hash response with text" do
         response = subject.ask(
@@ -314,15 +314,15 @@ describe GoogleAssistant::Assistant do
         )
 
         expected_response = {
-          conversation_token: "{\"state\":null,\"data\":{}}",
-          expect_user_response: true,
-          expected_inputs: [
+          conversationToken: "{\"state\":null,\"data\":{}}",
+          expectUserResponse: true,
+          expectedInputs: [
             {
-              input_prompt: {
-                initial_prompts: [{ text_to_speech: "Some text input prompt" }],
-                no_input_prompts: [{ text_to_speech: "A no input prompt" }]
+              inputPrompt: {
+                initialPrompts: [{ textToSpeech: "Some text input prompt" }],
+                noInputPrompts: [{ textToSpeech: "A no input prompt" }]
               },
-              possible_intents: [{ intent: "assistant.intent.action.TEXT" }]
+              possibleIntents: [{ intent: "actions.intent.TEXT" }]
             }
           ]
         }
@@ -331,7 +331,7 @@ describe GoogleAssistant::Assistant do
       end
     end
 
-    describe "when given an array of strings for no_input_prompt" do
+    describe "when given an array of strings for no_inputPrompt" do
 
       it "returns a JSON hash response with text" do
         response = subject.ask(
@@ -343,18 +343,18 @@ describe GoogleAssistant::Assistant do
         )
 
         expected_response = {
-          conversation_token: "{\"state\":null,\"data\":{}}",
-          expect_user_response: true,
-          expected_inputs: [
+          conversationToken: "{\"state\":null,\"data\":{}}",
+          expectUserResponse: true,
+          expectedInputs: [
             {
-              input_prompt: {
-                initial_prompts: [{ text_to_speech: "Some text input prompt" }],
-                no_input_prompts: [
-                  { text_to_speech: "A no input prompt" },
+              inputPrompt: {
+                initialPrompts: [{ textToSpeech: "Some text input prompt" }],
+                noInputPrompts: [
+                  { textToSpeech: "A no input prompt" },
                   { ssml: "<speak>Yet another no input prompt</speak>" }
                 ]
               },
-              possible_intents: [{ intent: "assistant.intent.action.TEXT" }]
+              possibleIntents: [{ intent: "actions.intent.TEXT" }]
             }
           ]
         }
@@ -408,22 +408,21 @@ describe GoogleAssistant::Assistant do
         response = subject.ask_for_permission("A context", GoogleAssistant::Permission::NAME)
 
         expected_response = {
-          conversation_token: "{\"state\":null,\"data\":{}}",
-          expect_user_response: true,
-          expected_inputs: [
+          conversationToken: "{\"state\":null,\"data\":{}}",
+          expectUserResponse: true,
+          expectedInputs: [
             {
-              input_prompt: {
-                initial_prompts: [{ text_to_speech: "placeholder" }],
-                no_input_prompts: []
+              inputPrompt: {
+                initialPrompts: [{ textToSpeech: "placeholder" }],
+                noInputPrompts: []
               },
-              possible_intents: [
+              possibleIntents: [
                 {
-                  intent: "assistant.intent.action.PERMISSION",
-                  input_value_spec: {
-                    permission_value_spec: {
-                      opt_context: "A context",
-                      permissions: ["NAME"]
-                    }
+                  intent: "actions.intent.PERMISSION",
+                  inputValueData: {
+                    "@type": "type.googleapis.com/google.actions.v2.PermissionValueSpec",
+                    optContext: "A context",
+                    permissions: ["NAME"]
                   }
                 }
               ]

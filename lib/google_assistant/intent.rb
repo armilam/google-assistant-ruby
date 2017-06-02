@@ -4,13 +4,13 @@ module GoogleAssistant
   class StandardIntents
 
     # Assistant fires MAIN intent for queries like [talk to $action].
-    MAIN = "assistant.intent.action.MAIN"
+    MAIN = "actions.intent.MAIN"
 
     # Assistant fires TEXT intent when action issues ask intent.
-    TEXT = "assistant.intent.action.TEXT"
+    TEXT = "actions.intent.TEXT"
 
     # Assistant fires PERMISSION intent when action invokes askForPermission.
-    PERMISSION = "assistant.intent.action.PERMISSION"
+    PERMISSION = "actions.intent.PERMISSION"
   end
 
   class Intent

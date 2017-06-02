@@ -12,11 +12,11 @@ module GoogleAssistant
     end
 
     def zip_code
-      location["zip_code"]
+      location["zipCode"]
     end
 
     def formatted_address
-      location["formatted_address"]
+      location["formattedAddress"]
     end
 
     def latitude

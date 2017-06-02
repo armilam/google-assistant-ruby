@@ -19,7 +19,7 @@ module GoogleAssistant
 
         expected_intent = build_expected_intent(StandardIntents::PERMISSION, permissions, context)
         expected_inputs = build_expected_inputs(expected_intent: expected_intent)
-        response[:expected_inputs] = expected_inputs
+        response[:expectedInputs] = expected_inputs
 
         response
       end

@@ -1,29 +1,30 @@
 {
     "conversation": {
-        "conversation_id": "1234567890",
-        "conversation_token": "{\"state\":null,\"data\":{}}",
-        "type": 2
+        "conversationId": "1234567890",
+        "conversationToken": "{\"state\":null,\"data\":{}}",
+        "type": "ACTIVE"
     },
     "inputs": [
         {
-            "intent": "assistant.intent.action.PERMISSION",
-            "raw_inputs": [
+            "intent": "actions.intent.PERMISSION",
+            "rawInputs": [
                 {
-                    "input_type": 2,
+                    "inputType": "KEYBOARD",
                     "query": "sure"
                 }
             ],
             "arguments": [
                 {
-                    "name": "permission_granted",
-                    "raw_text": "sure",
-                    "text_value": "true"
+                    "name": "PERMISSION",
+                    "rawText": "sure",
+                    "textValue": "true"
                 }
             ]
         }
     ],
     "user": {
-        "user_id": "qwERtyUiopaSdfGhJklzXCVBNm/tF="
+        "locale": "en-US",
+        "userId": "qwERtyUiopaSdfGhJklzXCVBNm/tF="
     },
     "device": {
         "location": {
@@ -31,8 +32,8 @@
                 "latitude": 37.422,
                 "longitude": -122.084
             },
-            "formatted_address": "1600 Amphitheatre Parkway, Mountain View, CA 94043, United States",
-            "zip_code": "94043",
+            "formattedAddress": "1600 Amphitheatre Parkway, Mountain View, CA 94043, United States",
+            "zipCode": "94043",
             "city": "Mountain View"
         }
     }

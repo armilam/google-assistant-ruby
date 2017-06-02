@@ -2,7 +2,7 @@ require "minitest/autorun"
 require "google_assistant/conversation"
 
 describe GoogleAssistant::Conversation do
-  let(:conversation_params) { { "conversation_id" => "abc123", "type" => 1, "conversation_token" => { "state" => "some state", "data" => { "some data" => "a value" } } } }
+  let(:conversation_params) { { "conversationId" => "abc123", "type" => 1, "conversationToken" => { "state" => "some state", "data" => { "some data" => "a value" } } } }
   subject { GoogleAssistant::Conversation.new(conversation_params) }
 
   describe "#initialize" do

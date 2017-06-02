@@ -13,9 +13,9 @@ module GoogleAssistant
     attr_reader :id, :type, :dialog_state
 
     def initialize(opts)
-      @id = opts["conversation_id"]
+      @id = opts["conversationId"]
       @type = opts["type"]
-      @dialog_state = DialogState.new(opts["conversation_token"])
+      @dialog_state = DialogState.new(opts["conversationToken"])
     end
 
     def state
