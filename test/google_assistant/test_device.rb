@@ -9,8 +9,8 @@ describe GoogleAssistant::Device do
           "latitude" => 37.422,
           "longitude" => -122.084
         },
-        "formatted_address" => "1600 Amphitheatre Parkway, Mountain View, CA 94043, United States",
-        "zip_code" => "94043",
+        "formattedAddress" => "1600 Amphitheatre Parkway, Mountain View, CA 94043, United States",
+        "zipCode" => "94043",
         "city" => "Mountain View"
       }
     }
@@ -35,14 +35,14 @@ describe GoogleAssistant::Device do
   describe "#zip_code" do
 
     it "returns the zip_code from the hash" do
-      assert_equal(params["location"]["zip_code"], subject.zip_code)
+      assert_equal(params["location"]["zipCode"], subject.zip_code)
     end
   end
 
   describe "#formatted_address" do
 
     it "returns the formatted_address from the hash" do
-      assert_equal(params["location"]["formatted_address"], subject.formatted_address)
+      assert_equal(params["location"]["formattedAddress"], subject.formatted_address)
     end
   end
 

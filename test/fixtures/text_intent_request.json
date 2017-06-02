@@ -1,28 +1,28 @@
 {
     "conversation": {
-        "conversation_id": "1234567890",
-        "conversation_token": "{\"state\":null,\"data\":{}}",
+        "conversationId": "1234567890",
+        "conversationToken": "{\"state\":null,\"data\":{}}",
         "type": 2
     },
     "inputs": [
         {
             "arguments": [
                 {
-                    "name": "text",
-                    "raw_text": "this is some input",
-                    "text_value": "this is some input"
+                    "name": "TEXT",
+                    "rawText": "this is some input",
+                    "textValue": "this is some input"
                 }
             ],
-            "intent": "assistant.intent.action.TEXT",
-            "raw_inputs": [
+            "intent": "actions.intent.TEXT",
+            "rawInputs": [
                 {
-                    "input_type": 2,
+                    "inputType": 2,
                     "query": "this is some input"
                 }
             ]
         }
     ],
     "user": {
-        "user_id": "qwERtyUiopaSdfGhJklzXCVBNm/tF="
+        "userId": "qwERtyUiopaSdfGhJklzXCVBNm/tF="
     }
 }

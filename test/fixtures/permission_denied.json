@@ -1,28 +1,28 @@
 {
     "conversation": {
-        "conversation_id": "1234567890",
-        "conversation_token": "{\"state\":null,\"data\":{}}",
+        "conversationId": "1234567890",
+        "conversationToken": "{\"state\":null,\"data\":{}}",
         "type": 2
     },
     "inputs": [
         {
-            "intent": "assistant.intent.action.PERMISSION",
-            "raw_inputs": [
+            "intent": "actions.intent.PERMISSION",
+            "rawInputs": [
                 {
-                    "input_type": 2,
+                    "inputType": 2,
                     "query": "nope"
                 }
             ],
             "arguments": [
                 {
-                    "name": "permission_granted",
-                    "raw_text": "nope",
-                    "text_value": "false"
+                    "name": "PERMISSION",
+                    "rawText": "nope",
+                    "textValue": "false"
                 }
             ]
         }
     ],
     "user": {
-        "user_id": "qwERtyUiopaSdfGhJklzXCVBNm/tF="
+        "userId": "qwERtyUiopaSdfGhJklzXCVBNm/tF="
     }
 }

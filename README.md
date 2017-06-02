@@ -275,7 +275,7 @@ You can use any hosting platform.
       "actions": [
         {
           "initialTrigger": {
-            "intent": "assistant.intent.action.MAIN"
+            "intent": "actions.intent.MAIN"
           },
           "httpExecution": {
             "url": "https://yourapp.domain.com/path-to-your-assistant"

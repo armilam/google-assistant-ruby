@@ -2,14 +2,14 @@ require "minitest/autorun"
 require "google_assistant/argument"
 
 describe GoogleAssistant::Argument do
-  let(:params) { { "name" => "a name", "raw_text" => "some raw text", "text_value" => "some text value" } }
+  let(:params) { { "name" => "a name", "rawText" => "some raw text", "textValue" => "some text value" } }
   subject { GoogleAssistant::Argument.new(params) }
 
   describe "#from" do
     subject { GoogleAssistant::Argument.from(params) }
 
-    describe "when name is permission_granted" do
-      let(:params) { { "name" => "permission_granted" } }
+    describe "when name is PERMISSION" do
+      let(:params) { { "name" => "PERMISSION" } }
 
       it "returns a PermissionArgument object" do
         assert_equal(GoogleAssistant::PermissionArgument, subject.class)
@@ -17,7 +17,7 @@ describe GoogleAssistant::Argument do
     end
 
     describe "when name is text" do
-      let(:params) { { "name" => "text" } }
+      let(:params) { { "name" => "TEXT" } }
 
       it "returns a TextArgument object" do
         assert_equal(GoogleAssistant::TextArgument, subject.class)
@@ -37,31 +37,31 @@ describe GoogleAssistant::Argument do
 
     it "sets the class's attributes" do
       assert_equal(params["name"], subject.name)
-      assert_equal(params["raw_text"], subject.raw_text)
-      assert_equal(params["text_value"], subject.text_value)
+      assert_equal(params["rawText"], subject.raw_text)
+      assert_equal(params["textValue"], subject.text_value)
     end
   end
 end
 
 describe GoogleAssistant::TextArgument do
-  let(:params) { { "name" => "text", "text_value" => "some text value" } }
+  let(:params) { { "name" => "TEXT", "textValue" => "some text value" } }
   subject { GoogleAssistant::Argument.from(params) }
 
   describe "#value" do
 
     it "returns the value of text_value" do
-      assert_equal(params["text_value"], subject.value)
+      assert_equal(params["textValue"], subject.value)
     end
   end
 end
 
 describe GoogleAssistant::PermissionArgument do
-  let(:params) { { "name" => "permission_granted", "text_value" => text_value } }
+  let(:params) { { "name" => "PERMISSION", "textValue" => text_value } }
   subject { GoogleAssistant::Argument.from(params) }
 
   describe "#permission_granted?" do
 
-    describe "when text_value is true" do
+    describe "when textValue is true" do
       let(:text_value) { "true" }
 
       it "returns true" do
@@ -69,7 +69,7 @@ describe GoogleAssistant::PermissionArgument do
       end
     end
 
-    describe "when text_value is false" do
+    describe "when textValue is false" do
       let(:text_value) { "false" }
 
       it "returns false" do
