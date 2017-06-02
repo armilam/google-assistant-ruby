@@ -140,7 +140,7 @@ describe GoogleAssistant::Assistant do
       conversation = subject.conversation
 
       assert_equal("1234567890", conversation.id)
-      assert_equal(2, conversation.type)
+      assert_equal("ACTIVE", conversation.type)
       assert_equal(GoogleAssistant::DialogState, conversation.dialog_state.class)
     end
   end

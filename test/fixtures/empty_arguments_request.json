@@ -1,7 +1,7 @@
 {
     "conversation": {
         "conversationId": "1234567890",
-        "type": 1
+        "type": "NEW"
     },
     "inputs": [
         {
@@ -9,13 +9,14 @@
             "intent": "actions.intent.MAIN",
             "rawInputs": [
                 {
-                    "inputType": 2,
+                    "inputType": "KEYBOARD",
                     "query": "Google Assistant Ruby Test"
                 }
             ]
         }
     ],
     "user": {
+        "locale": "en-US",
         "userId": "qwERtyUiopaSdfGhJklzXCVBNm/tF="
     }
 }

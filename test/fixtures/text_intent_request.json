@@ -2,7 +2,7 @@
     "conversation": {
         "conversationId": "1234567890",
         "conversationToken": "{\"state\":null,\"data\":{}}",
-        "type": 2
+        "type": "ACTIVE"
     },
     "inputs": [
         {
@@ -16,13 +16,14 @@
             "intent": "actions.intent.TEXT",
             "rawInputs": [
                 {
-                    "inputType": 2,
+                    "inputType": "KEYBOARD",
                     "query": "this is some input"
                 }
             ]
         }
     ],
     "user": {
+        "locale": "en-US",
         "userId": "qwERtyUiopaSdfGhJklzXCVBNm/tF="
     }
 }

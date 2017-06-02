@@ -2,14 +2,14 @@
     "conversation": {
         "conversationId": "1234567890",
         "conversationToken": "{\"state\":null,\"data\":{}}",
-        "type": 2
+        "type": "ACTIVE"
     },
     "inputs": [
         {
             "intent": "actions.intent.PERMISSION",
             "rawInputs": [
                 {
-                    "inputType": 2,
+                    "inputType": "KEYBOARD",
                     "query": "sure"
                 }
             ],
@@ -23,6 +23,7 @@
         }
     ],
     "user": {
+        "locale": "en-US",
         "userId": "qwERtyUiopaSdfGhJklzXCVBNm/tF=",
         "profile": {
             "displayName": "John Smith",
