@@ -37,8 +37,8 @@ class GoogleAssistantController < ApplicationController
     assistant_response = GoogleAssistant.respond_to(params, response) do |assistant|
       assistant.intent.main do
         assistant.ask(
-          prompt: "<speak>Hi there! Say something, please.</speak>",
-          no_input_prompt: [
+          "<speak>Hi there! Say something, please.</speak>",
+          [
             "<speak>If you said something, I didn't hear you.</speak>",
             "<speak>Did you say something?</speak>"
           ]
@@ -92,8 +92,8 @@ Request user input by sending an `ask` response. Send a prompt and a set of foll
 ```rb
 assistant.intent.main do
   assistant.ask(
-    prompt: "<speak>Hi there! Say something, please.</speak>",    # The voice prompt the user will hear.
-    no_input_prompt: [
+    "<speak>Hi there! Say something, please.</speak>",            # The voice prompt the user will hear.
+    [
       "<speak>If you said something, I didn't hear you.</speak>", # You can provide a number of "no input prompts". A random
       "<speak>Did you say something?</speak>"                     # one will be spoken if the user takes too long to respond.
     ]
@@ -146,8 +146,8 @@ GoogleAssistant.respond_to(params, response) do |assistant|
     assistant.conversation.state = "asking favorite color"
 
     assistant.ask(
-      prompt: "What is your favorite color?",
-      no_input_prompt: ["What did you say your favorite color is?"]
+      "What is your favorite color?",
+      ["What did you say your favorite color is?"]
     )
   end
 
@@ -158,8 +158,8 @@ GoogleAssistant.respond_to(params, response) do |assistant|
       assistant.conversation.state = "asking lucky number"
 
       assistant.ask(
-        prompt: "What is your lucky number?",
-        no_input_prompt: ["What did you say your lucky number is?"]
+        "What is your lucky number?",
+        ["What did you say your lucky number is?"]
       )
     elsif assistant.conversation.state == "asking lucky number"
       favorite_color = assistant.conversation.data["favorite_color"]
@@ -192,7 +192,7 @@ Request the user's name. This will result in a prompt to the user like:
 ```rb
 assistant.intent.main do
   # Request the user's name
-  assistant.ask_for_permission(context: "So that I can address you by name", permissions: GoogleAssistant::Permission::NAME)
+  assistant.ask_for_permission("So that I can address you by name", GoogleAssistant::Permission::NAME)
 end
 
 assistant.intent.permission do
@@ -215,7 +215,7 @@ Request the device's zip code and city. This will result in a prompt to the user
 ```rb
 assistant.intent.main do
   # Request the device's zip code and city
-  assistant.ask_for_permission(context: "To provide weather information for where you live", permissions: GoogleAssistant::Permission::DEVICE_COARSE_LOCATION)
+  assistant.ask_for_permission("To provide weather information for where you live", GoogleAssistant::Permission::DEVICE_COARSE_LOCATION)
 end
 
 assistant.intent.permission do
@@ -237,7 +237,7 @@ Request the device's precise location. This will result in a prompt to the user 
 ```rb
 assistant.intent.main do
   # Request the device's precise location
-  assistant.ask_for_permission(context: "So that I can find out where you sleep at night", permissions: GoogleAssistant::Permission::DEVICE_PRECISE_LOCATION)
+  assistant.ask_for_permission("So that I can find out where you sleep at night", GoogleAssistant::Permission::DEVICE_PRECISE_LOCATION)
 end
 
 assistant.intent.permission do
@@ -264,24 +264,38 @@ You can use any hosting platform.
 3. Deploy your app to the web. Heroku is a good choice. See [Heroku's documentation](https://devcenter.heroku.com/articles/getting-started-with-ruby#introduction) for more info on how to do this.
 4. Add an `action.json` file at the root of your project.
 
+
     ```json
     {
-      "versionLabel": "1.0.0",
-      "agentInfo": {
-        "languageCode": "en-US",
-        "projectId": "your-google-project-id",
+      "manifest": {
+        "displayName": "My Google Assistant",
+        "invocationName": "my action",
+        "shortDescription": "I made an assistant",
+        "longDescription": "This assistant makes use of the google_assistant Ruby gem. It's very neat.",
+        "sampleInvocation": [
+          "talk to my action"
+        ],
         "voiceName": "male_1"
       },
       "actions": [
         {
-          "initialTrigger": {
-            "intent": "actions.intent.MAIN"
+          "description": "The main intent",
+          "name": "MAIN",
+          "fulfillment": {
+            "conversationName": "my_action"
           },
-          "httpExecution": {
-            "url": "https://yourapp.domain.com/path-to-your-assistant"
+          "intent": {
+            "name": "actions.intent.MAIN"
           }
         }
-      ]
+      ],
+      "conversations": {
+        "my_action": {
+          "name": "my_action",
+          "url": "https://yourapp.domain.com/path-to-your-assistant",
+          "fulfillmentApiVersion": 2
+        }
+      }
     }
     ```
 
@@ -297,7 +311,7 @@ You can use any hosting platform.
 
 ## Authentication
 
-You can require users to log in to your service before using your assistant. Read about it in [Google's documentation](https://developers.google.com/actions/develop/identity/oauth2-code-flow). The basic flow is this:
+You can require users to log in to your service before using your assistant. Read about it in [Google's documentation](https://developers.google.com/actions/identity/account-linking#account_linking_at_invocation_time). The basic flow is this:
 
 1. User tries to talk to your assistant
 2. Google tells the user they need to sign in, which they can do via the Home app on their phone
@@ -306,15 +320,14 @@ You can require users to log in to your service before using your assistant. Rea
 5. Google stores the user's Oauth access and refresh tokens
 6. For each subsequent request the user makes to your assistant, Google sends the user's access token so you can identify the user
 
-In order to set this up in your assistant, the basic instructions are as follows. Read Google's documentation for the full details.
+When you have everything set up, you can find the user's access token for your app in `assistant.user.access_token`.
 
-1. Implement Oauth in your application
-2. Set up an Oauth client in the [Google Developer Console](https://console.developers.google.com)
-3. In the application's `action.json` file, set up account linking according to [Google's Instructions](https://developers.google.com/actions/develop/identity/account-linking#enabling_account_linking)
-4. Use `assistant.user.access_token` to identify the user
+#### Account linking during the conversation
+
+This gem doesn't yet support account linking during the conversation. This would be neat to have. See [#32](https://github.com/armilam/google-assistant-ruby/issues/32).
 
 ## More information
 
-Check out Google's instructions at https://developers.google.com/actions/develop/sdk/getting-started for more detail on writing and testing a Google Assistant action.
+Check out Google's instructions at https://developers.google.com/actions/sdk/ for more detail on writing and testing a Google Assistant action.
 
 Check out https://github.com/armilam/google_assistant_example for a simple example of this gem in action.
